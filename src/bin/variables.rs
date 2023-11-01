@@ -9,11 +9,13 @@ fn main() {
     let mut a = 1; // variables are immutable by default
     let b = 2;
     let _草泥马: (); // underscore prefix suppresses unused variable warning
-    let _żółć: ();
 
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
     𐐘 = 5; // variables can be initialised after declaration
+
+    println!("a = {}\n", a);
+    let a = 0.5f64; // shadowing
 
     println!("𐐘 = {}", 𐐘);
     println!("y = {}", y);
