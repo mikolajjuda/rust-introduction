@@ -189,7 +189,7 @@ fn main() {
 Typy sekwencyjne
 ---
 
-# Krotki `(T1, T2, T3, ...)`
+# Krotki `(T1, T2, T3, /*etc.*/)`
 - lista wartości o różnych typach
 - stała długość
 - Przykłady:
@@ -383,7 +383,7 @@ struct StructName {
     field1: T1,
     field2: T2,
     field3: T3,
-    ...
+    // etc.
 }
 ```
 podobne do struktur w C
@@ -392,7 +392,7 @@ podobne do struktur w C
 
 ## Struktury krotkowe
 ```rust
-struct StructName(T1, T2, T3, ...);
+struct StructName(T1, T2, T3, /*etc.*/);
 ```
 podobne do krotek
 
@@ -414,7 +414,7 @@ enum EnumName {
     Variant1,       // implicit discriminant 0
     Variant2 = 123, // explicit disscriminant 123
     Variant3,       // implicit discriminant 124
-    ...
+    // etc.
 }
 
 ```
@@ -425,7 +425,7 @@ enum NumName {
     Variant2(bool, u8),          // optional tuple constructor
     Variant3 { x: f32, y: f32 }, // optional struct constructor
     Variant4(i32),
-    ...
+    // etc.
 }
 ```
 podobne do tzw. rekordu z wariantami
@@ -442,7 +442,7 @@ union StructName {
     field1: T1,
     field2: T2,
     field3: T3,
-    ...
+    // etc.
 }
 ```
 - podobne do unii w C
@@ -600,9 +600,50 @@ match c {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Cargo
+Funkcje
 ---
 
+```rust
+fn function_name(param1: T1, param2: T2, /*etc.*/) -> ReturnType {
+    statement1;
+    statement2;
+    // etc.
+    expression_of_type_ReturnType
+}
+
+fn function_without_return(param1: T1, param2: T2, /*etc.*/) {} // default return type is ()
+```
+
+```rust
+fn is_nonnegative(x: i32) -> bool {
+    if x < 0 {
+        return false;
+    }
+    true // return true; is also possible
+}
+```
+<!-- end_slide -->
+
+Typy wskaźnikowe
+---
+
+# Referencje
+Referencje to wskaźniki do pamięci będącej własnością innej wartości.
+Borrow checker zapewnia poprawność wszystkich referencji.
+
+## Referencje współdzielone `&T`
+- uniemożliwiają bezpośrednią modyfikację wskazywanej wartości
+- mogą być kopiowane
+
+## Referencje mutowalne `&mut T`
+- umożliwia bezpośrednią modyfikację wskazywanej wartości
+- w jednym momencie może istnieć tylko jedna referencja mutowalna do danej wartości
+
+# Surowe wskaźniki `*const T` i `*mut T`
+- brak żadnych gwarancji poprawności i bezpieczeństwa
+- dereferencja surowego wskaźnika jest niebezpieczna
+
+Referencje i wskaźniki na typy o dynamicznym rozmiarze stają się wskaźnikami szerokimi (mają dodatkową informację o rozmiarze).
 
 <!-- end_slide -->
 
@@ -621,7 +662,7 @@ println!("{:?}", vec);
 # `String`
 napis w kodowaniu UTF-8 o zmiennym rozmiarze
 ```rust
-let mut string = "Hello".to_string();
+let mut string: String = "Hello".to_string();
 string.push_str(" world");
 string.push('!');
 println!("{}", string);
@@ -629,3 +670,100 @@ println!("{}", string);
 
 <!-- end_slide -->
 
+Własność
+---
+
+Zamiast zmuszać programistę do ręcznego alokowania i zwalniania pamięci lub polegać na odśmiecaniu przez garbage collector,
+Rust do zarządzania pamięcią wykorzystuje system własności z zestawem reguł sprawdzanych przez kompilator.
+
+# Zasady systemu własności
+- Każda wartość ma właściciela.
+- W danym momencie może istnieć tylko jeden właściciel (dla danej wartości).
+- Kiedy właściciel wychodzi z zasięgu, posiadana przez niego wartość zostaje zwolniona.
+
+```rust
+{ // x is not in scope yet
+    let x = 5; // x enters the scope here
+} // x goes out of scope here
+println!("x is {}", x); // compiler error: cannot find value `x` in this scope
+```
+Rust używa wzorca RAII.
+```rust
+{
+    let s = "hello".to_string(); // s is valid form here (memory allocated)
+} // drop method called (destructor) releasing heap memory
+```
+
+<!-- end_slide -->
+
+Semantyka przenoszenia
+---
+
+```rust
+let s1 = "hello".to_string();
+let s2 = s1; // assignment operator transfers ownership (unless type implements Copy trait)
+// s1 is no longer valid, destructor will not be called
+println!("{s2}");
+println!("{s1}"); // compiler error: borrow of moved value: `s1`
+```
+```rust
+fn print_string(s: String) {
+    println!("{s}");
+}
+
+fn main() {
+    let s1 = "hello".to_string();
+    print_string(s1); // function parameter takes ownership
+    print_string(s1); // compiler error: use of moved value: `s1`
+}
+```
+
+<!-- end_slide -->
+
+Semantyka przenoszenia
+---
+
+```rust
+fn make_string() -> String {
+    "hello".to_string()
+}
+
+fn main() {
+    let s = make_string();
+    println!("{s}");
+}
+```
+```rust
+fn print_and_return_string(s: String) -> String {
+    println!("{s}");
+    s
+}
+
+fn main() {
+    let s = "hello".to_string();
+    // ownership transfered to function and then back to new s
+    let s = print_and_return_string(s);
+    print_and_return_string(s);
+}
+```
+
+<!-- end_slide -->
+
+Pożyczanie
+---
+
+
+<!-- end_slide -->
+
+Metody
+---
+
+
+
+<!-- end_slide -->
+
+Cargo
+---
+
+
+<!-- end_slide -->

@@ -4,7 +4,7 @@ fn main() {
     vec.push(2);
     println!("{:?}", vec);
 
-    let mut string = "Hello".to_string();
+    let mut string: String = "Hello".to_string();
     string.push_str(" world");
     string.push('!');
     println!("{}", string);
