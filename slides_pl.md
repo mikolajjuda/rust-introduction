@@ -19,7 +19,7 @@ skupiającym się, między innymi, na bezpieczeństwie, niezawodności i wydajno
 <!-- column: 0 -->
 
 ## ważne cechy:
-- bezpieczeństwo pamięci bez potrzeby automatycznego odśmiecania (borrow checker)
+- bezpieczeństwo pamięci bez potrzeby automatycznego odśmiecania
 - zapobieganie wyścigom danych między wątkami
 - silny system typów inspirowany językami funkcyjnymi (bazuje na nim obsługa błędów)
 - możliwość programowania niskopoziomowego (wskaźniki, unsafe, inline assembly)
@@ -168,7 +168,7 @@ fn main() {
     let y = 10u8; // type inferred from literal u8
     let mut a = 1; // variables are immutable by default
     let b = 2;
-    let _草泥马: (); // underscore prefix suppresses unused variable warning
+    let _żółć: (); // underscore prefix suppresses unused variable warning
 
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
@@ -414,6 +414,7 @@ enum EnumName {
     Variant1,       // implicit discriminant 0
     Variant2 = 123, // explicit disscriminant 123
     Variant3,       // implicit discriminant 124
+    ...
 }
 
 ```
@@ -424,6 +425,7 @@ enum NumName {
     Variant2(bool, u8),          // optional tuple constructor
     Variant3 { x: f32, y: f32 }, // optional struct constructor
     Variant4(i32),
+    ...
 }
 ```
 podobne do tzw. rekordu z wariantami
@@ -452,6 +454,155 @@ union StructName {
 
 Dopasowanie do wzorca
 ---
+
+```rust
+let number = 7;
+    match number {
+    1 => println!("lonely"),
+    2 | 3 | 5 | 7 | 11 => println!("small prime"),
+    13..=19 => println!("teen"),
+    x if x < 0 => println!("negative"),
+    _ => println!("not special"),
+}
+
+let a = true;
+let b = match a {
+    true => 1,
+    false => 0,
+};
+println!("b is {}", b);
+```
+```
+small prime
+b is 1
+```
+
+<!-- end_slide -->
+
+Dopasowanie do wzorca
+---
+
+```rust
+struct Color {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+fn main() {
+    let c = RGB { r: 64, g: 0, b: 0 };
+    match c {
+        RGB { r: 0, g: 0, b: 0 } => println!("black"),
+        RGB { r: r @ 0..=80, g: 0, b: 0, } => println!("some sort of dark red {r}"),
+        RGB { b: 255, .. } => println!("something with maximum blue"),
+        RGB { r, g, b } => println!("r: {}, g: {}, b: {}", r, g, b),
+    }
+    let RGB { r: red, g: green, b: blue, } = c;
+    println!("red: {}, green: {}, blue: {}", red, green, blue);
+}
+```
+```
+some sort of dark red 64
+red: 64, green: 0, blue: 0
+```
+
+<!-- end_slide -->
+
+Dopasowanie do wzorca
+---
+
+```rust
+let some_tuple: (u8, bool, f32, char) = (10, false, 0.1, 'Σ');
+match some_tuple {
+    (0..=9, .., 'α'..='ω' | 'Α'..='Ω') => println!("digit and a greek letter"),
+    (.., 'Σ') => println!("ends with a letter sigma"),
+    (0, ..) => println!("starts with zero"),
+    (_, true, _, c) => println!("second value is true and fourth is {}", c),
+    entire_tuple => println!("{:?}", entire_tuple),
+}
+let (a, c, d, e) = some_tuple;
+println!("a: {}, c: {}, d: {}, e: {}", a, c, d, e);
+```
+```
+ends with a letter sigma
+a: 10, c: false, d: 0.1, e: Σ
+```
+
+<!-- end_slide -->
+
+Dopasowanie do wzorca
+---
+
+```rust
+let arr = [1, 2, 3, 4, 5];
+match arr {
+    [0, .., last] => println!("arr[0]: 0, last: {}", last),
+    [first, middle @ .., 5] => println!("arr[0]: {}, middle: {:?}", first, middle),
+    [_, _, tail @ ..] => println!("arr[0] and arr[1] ignored, tail: {:?}", first, tail),
+}
+let [a, b, c, d, e] = arr;
+println!("a: {}, b: {}, c: {}, d: {}, e: {}", a, b, c, d, e);
+```
+```
+arr[0]: 1, middle: [2, 3, 4]
+a: 1, b: 2, c: 3, d: 4, e: 5
+```
+
+<!-- end_slide -->
+
+Dopasowanie do wzorca
+---
+
+<!-- column_layout: [1, 2] -->
+
+<!-- column: 0 -->
+```rust
+struct RGB {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+enum Color {
+    Red,
+    Green,
+    Blue,
+    RGB(RGB),
+    HSV{h: u8, s: u8, v: u8},
+    CMYK(u8, u8, u8, u8),
+}
+```
+```
+HSV: 1 100 25
+```
+
+<!-- column: 1 -->
+
+```rust
+let c = Color::HSV { h: 1, s: 100, v: 25 };
+match c {
+    Color::Red => println!("Red"),
+    Color::Green => println!("Green"),
+    Color::Blue => println!("Blue"),
+    Color::RGB(RGB { r: 0, g, b }) => {
+        println!("RGB: 0 {g} {b}");
+    }
+    Color::RGB(rgb) => {
+        println!("RGB: {} {} {}", rgb.r, rgb.g, rgb.b);
+    }
+    Color::HSV { h, s, v } => {
+        println!("HSV: {h} {s} {v}");
+    }
+    Color::CMYK(c, m, y, k) => {
+        println!("CMYK: {c} {m} {y} {k}");
+    }
+}
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Cargo
+---
+
 
 <!-- end_slide -->
 
