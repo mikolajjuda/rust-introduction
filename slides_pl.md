@@ -161,26 +161,28 @@ Zmienne
 ---
 
 ```rust
+// static items have a precise memory location
+static NUM: i64 = 123;
+// constants don't have a memory location and are inlined
+const PI: f64 = 3.141592;
 fn takes_i64(_x: i64) {}
-
 fn main() {
     let 𐐘: i32; // explicit type i32 (i32 is also the default for integers)
     let y = 10u8; // type inferred from literal u8
     let mut a = 1; // variables are immutable by default
     let b = 2;
     let _żółć: (); // underscore prefix suppresses unused variable warning
-
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
     𐐘 = 5; // variables can be initialised after declaration
-
     println!("a = {}\n", a);
     let a = 0.5f64; // shadowing
-
     println!("𐐘 = {}", 𐐘);
     println!("y = {}", y);
     println!("a = {}", a);
     println!("b = {}", b);
+    println!("PI = {}", PI);
+    println!("NUM = {}", NUM);
 }
 ```
 
@@ -1224,9 +1226,162 @@ fn main() {
 Czasy życia
 ---
 
+Czasy życia to konstrukt kompilatora używany do sprawdzania poprawności pożyczeń.
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+fn main() {
+    let x = 5; // lifetime of x starts here
+    {
+        let r1 = &x; // lifetime for r1 starts here
+
+        println!("r1: {}", r1);
+    } // lifetime of r1 ends here
+    {
+        let r2 = &x; // lifetime for r2 starts here
+
+        println!("r2: {}", r2);
+    } // lifetime of r2 ends here
+} // lifetime of x ends here
+```
+<!-- column: 1 -->
+
+```rust
+fn main() {
+    let r;
+    {
+        let x = 5;
+        r = &x; /* compiler error:
+        `x` does not live long enough*/
+    }
+    println!("r: {}", r);
+}
+```
+```rust
+fn main() {
+    let r;                // ---------+-- 'a
+                          //          |
+    {                     //          |
+        let x = 5;        // -+-- 'b  |
+        r = &x;           //  |       |
+    }                     // -+       |
+                          //          |
+    println!("r: {}", r); //          |
+}                         // ---------+
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Czasy życia
+---
+
+# Czasy życia w wywołaniach funkcji
+
+```rust
+fn longest_str(x: &str, y: &str) -> &str { /*compiler error:
+    expected named lifetime parameter*/
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+fn main() {
+    let s1 = "xyz";
+    let s2 = String::from("abcd");
+    let result = longest_str(s1, s2.as_str());
+    println!("The longest string is {}", result);
+}
+```
+<!-- end_slide -->
+
+Czasy życia
+---
+
+```rust
+fn longest_str<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+fn main() {
+    let s1 = "xyz".to_string();
+    let s2 = "abcd".to_string();
+    let result = longest_str(s1.as_str(), s2.as_str());
+    println!("The longest string is {}", result);
+}
+```
+Sygnatura funkcji oznacza teraz, że dla jakiegoś czasu życia `'a` funkcja `longest_str` pożycza dwa wycinki napisów,
+które żyją *przynajmniej* tak długo jak `'a` i zwraca referencję do wycinka napisu,
+który także żyje *przynajmniej* tak długo jak `'a`.
+Kompilator sam znajdzie taki czas życia.
+W tym przypadku oznacza to, że wartość wskazywana przez zwracaną referencję,
+żyje tak długo jak krócej żyjąca spośród wartości wskazywanych przez referencje w parametrach.
+
+<!-- end_slide -->
+
+Czasy życia
+---
+
+# Czasy życia w strukturach danych
+
+```rust
+struct Human {
+    name: String,
+}
+
+struct Pet<'a> {
+    name: String,
+    owner: &'a Human,
+}
+
+fn main() {
+    let human = Human {
+        name: "John".to_string(),
+    };
+    let pet = Pet {
+        name: "Steve".to_string(),
+        owner: &human,
+    };
+    println!("{}'s owner name is {}", pet.name, pet.owner.name);
+}
+```
+
+<!-- end_slide -->
+
+Czasy życia
+---
+
+# `'static`
+
+```rust
+static NUM: u8 = 6;
+
+// T doesn't contain non-static references
+fn print_static<T: std::fmt::Display + 'static>(x: T) {
+    println!("{}", x);
+}
+
+fn main() {
+    let s: &'static str = "hello"; // string literals have 'static lifetime
+    print_static(s); // hello
+    print_static(&NUM); // 6
+    let x = 5;
+    print_static(x); // 5
+    print_static(&x); // compiler error: `x` does not live long enough
+}
+```
+
 <!-- end_slide -->
 
 Cargo
 ---
 
-<!-- end_slide -->
