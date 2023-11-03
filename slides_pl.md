@@ -483,7 +483,7 @@ Dopasowanie do wzorca
 ---
 
 ```rust
-struct Color {
+struct RGB {
     r: u8,
     g: u8,
     b: u8,
@@ -605,9 +605,7 @@ Funkcje
 
 ```rust
 fn function_name(param1: T1, param2: T2, /*etc.*/) -> ReturnType {
-    statement1;
-    statement2;
-    // etc.
+    // stuff
     expression_of_type_ReturnType
 }
 
@@ -752,18 +750,483 @@ fn main() {
 Pożyczanie
 ---
 
+Operacje na wartościach można wykonywać bez przejmowania nad nimi własności używając referencji.
+Tworzenie referencji nazywa się *pożyczaniem*.
+
+# Zasady dotyczące referencji
+- W każdym momencie może istnieć *albo* dowolna ilość referencji współdzielonych
+*albo* jedna referencja mutowalna (dla danej wartości).
+- Referencje zawsze muszą być prawidłowe
 
 <!-- end_slide -->
 
-Metody
+Pożyczanie
 ---
 
+```rust
+fn print_string(s: &String) {
+    println!("{s}");
+} // s goes out of scope, but it doesn't have ownership of the string, so it's not dropped
 
+fn main() {
+    let s = "hello".to_string();
+    print_string(&s); // we pass a reference instead of the string itself
+    print_string(&s); // s is valid here
+}
+```
+
+```rust
+fn change_string(s: &mut String) {
+    s.push('!');
+}
+
+fn main() {
+    let mut s1 = "hello".to_string();
+    println!("{}", s1); // hello
+    change_string(&mut s1);
+    println!("{}", s1); // hello!
+}
+```
+
+<!-- end_slide -->
+
+Pożyczanie
+---
+
+```rust
+let s = "hello".to_string();
+let r1 = &s;
+let r2 = &s;
+println!("{r1}");
+println!("{r2}");
+```
+
+```rust
+let mut s = "hello".to_string();
+let r1 = &s;
+let r2 = &mut s; /* compiler error:
+cannot borrow `s` as mutable because it is also borrowed as immutable */
+println!("{r1}");
+println!("{r2}");
+
+```
+
+```rust
+let mut s1 = "hello".to_string();
+let r1 = &mut s1;
+let r2 = &mut s1; // compiler error: cannot borrow `s1` as mutable more than once at a time
+println!("{}", r1);
+println!("{}", r2);
+```
+
+<!-- end_slide -->
+
+Pożyczanie
+---
+
+```rust
+fn change_string(s: &mut String) {
+    s.push('!');
+}
+
+fn main() {
+    let mut s1 = "hello".to_string();
+    let r1 = &mut s1;
+    // compiler error: cannot borrow `s1` as mutable more than once at a time
+    let r2 = &mut s1;
+    change_string(r1);
+    change_string(r2);
+    println!("{}", s1);
+}
+```
+
+<!-- end_slide -->
+
+Pożyczanie
+---
+
+```rust
+// this will not compile
+fn make_string_reference() -> &String {
+    let s = "hello".to_string();
+    &s // you can't return a reference to a value scoped to the function
+} // s is dropped here so the reference would be invalid
+
+fn main() {
+    let s = make_string_reference();
+}
+```
+
+<!-- end_slide -->
+
+Pożyczanie
+---
+
+# Wycinki
+
+<!-- column_layout: [2, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+fn print_str(s: &str) {
+    println!("{}", s);
+}
+fn first_four_letters(s: &String) -> &str {
+    &s[..4] /* caution:
+    byte indexing, use with ascii only*/
+}
+fn square_slice(s: &mut [i32]) {
+    for i in s {
+        *i = *i * *i;
+    }
+}
+fn main() {
+    let s = "Hello, world!".to_string();
+    println!("{}", first_four_letters(&s));
+    print_str(&s[7..=11]);
+
+    let mut arr = [1, 2, 3, 4, 5, 6, 7, 8];
+    square_slice(&mut arr[3..]); /* caution:
+    byte indexing, use with ascii only*/
+    println!("{:?}", arr);
+}
+```
+
+<!-- column: 1 -->
+
+```
+Hell
+world
+[1, 2, 3, 16, 25, 36, 49, 64]
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Metody i funkcje powiązane
+---
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+struct Human {
+    name: String,
+    age: u32,
+}
+
+impl Human {
+    // associated function
+    fn age_difference(h1: &Self, h2: &Self) -> i64 {
+        h1.age as i64 - h2.age as i64
+    }
+}
+```
+
+<!-- column: 1 -->
+
+```rust
+fn main() {
+    let human1 = Human {
+        name: String::from("Steve"),
+        age: 2,
+    };
+    let human2 = Human {
+        name: String::from("John"),
+        age: 123,
+    };
+    println!(
+        "age difference is {}",
+        Human::age_difference(&human1, &human2)
+    );
+}
+```
+```
+age difference is -121
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Metody i funkcje powiązane
+---
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+struct Human {
+    name: String,
+    age: u32,
+}
+
+impl Human {
+    // method (also associated function)
+    // &self is an alias for self: &Self
+    fn say_name(&self) {
+        println!("My name is {}", self.name);
+    }
+
+    // &mut self is an alias for self: &mut Self
+    fn birthday(&mut self) {
+        self.age += 1;
+    }
+
+    // self is an alias for self: Self
+    fn die(self) {
+        println!("{} dies", self.name);
+    } // self goes out of scope and is dropped
+}
+```
+
+<!-- column: 1 -->
+
+```rust
+fn main() {
+    let mut human = Human {
+        name: String::from("John"),
+        age: 30,
+    };
+    human.say_name();
+    human.birthday();
+    println!("{} is {}", human.name, human.age);
+    human.die();
+    // human is not valid anymore
+}
+```
+```
+My name is John
+John is 31 years old
+John dies
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Traits
+---
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+struct Dog;
+struct Cat;
+struct Human {
+    name: String,
+}
+trait Animal {
+    fn speak(&self); // no default implementation
+    // default implementation
+    fn is_alive(&self) -> bool {
+        true
+    }
+}
+impl Animal for Dog {
+    fn speak(&self) {
+        println!("woof!");
+    }
+}
+impl Animal for Cat {
+    fn speak(&self) {
+        println!("meow!");
+    }
+}
+```
+
+<!-- column: 1 -->
+
+```rust
+impl Animal for Human {
+    fn speak(&self) {
+        println!("Hello, my name is {}", self.name);
+    }
+}
+fn main() {
+    let dog = Dog;
+    let cat = Cat;
+    let person = Human {
+        name: "John".to_string(),
+    };
+    dog.speak();
+    cat.speak();
+    person.speak();
+    println!("Is the cat alive? {}", cat.is_alive());
+}
+```
+```
+woof!
+meow!
+Hello, my name is John
+Is the cat alive? true
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Traits
+---
+
+# Niektóre cechy wbudowane
+- Debug - umożliwia formatowanie w kontekście debugowania
+- Display - umożliwia "ładne" formatowanie
+- Clone - umożliwia klonowanie (metoda `clone`)
+- Copy - typ jest kopiowany zamiast przenoszenia
+- Drop - destruktor (metoda `drop`)
+- Deref i DerefMut - przeładowania operatora `*`
+- Default - domyślne wartości (funkcja `default`)
+- Eq - porównanie będące relacją równoważności
+- PartialEq - jak Eq, ale porównania nie muszą być zwrotne
+- Ord - porządek liniowy
+- PartialOrd - porządek częściowy
+- Hash - umożliwia hashowanie
+- Send - wartość może być wysyłana między wątkami
+- Sync - wartość może być dzielona między wątkami
+- Sized - rozmiar znany na etapie kompilacji
+
+<!-- end_slide -->
+
+Traits
+---
+
+```rust
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+struct Human {
+    name: String,
+    age: u32,
+}
+fn main() {
+    let default_human = Human::default();
+    println!("default human: {:?}", default_human);
+    let human = Human {
+        name: "John".to_string(),
+        age: 40,
+    };
+    let cloned_human = human.clone();
+    println!("human: {:?}", human);
+    println!("is human equal to default_human? {}", human==default_human);
+    println!("is human equal to cloned_human? {}", human==cloned_human);
+}
+```
+```
+default human: Human { name: "", age: 0 }
+human: Human { name: "John", age: 40 }
+is human equal to default_human? false
+is human equal to cloned_human? true
+```
+
+<!-- end_slide -->
+
+Uogólnienia
+---
+
+```rust
+struct Point<T> { x: T, y: T, }
+impl<T> Point<T> {
+    fn x(&self) -> &T { &self.x }
+    fn y(&self) -> &T { &self.y }
+}
+impl Point<String> {
+    fn special_x(&self) -> String {
+        format!("idk why Strings but here you go: {}", self.x)
+    }
+}
+fn main() {
+    let p1: Point<i16> = Point { x: 5, y: 10 };
+    let p2 = Point { x: 5.8, y: 10.2 };
+    let p3 = Point { x: "hello".to_string(), y: "world".to_string() };
+    println!("p1.x(): {}, p2.y(): {}, p3.x(): {}", p1.x(), p2.y(), p3.x());
+    println!("p3.special_x(): {}", p3.special_x());
+}
+```
+```
+p1.x(): 5, p2.y(): 10.2, p3.x(): hello
+p3.special_x(): idk why Strings but here you go: hello
+```
+
+<!-- end_slide -->
+
+Uogólnienia
+---
+
+<!-- column_layout: [2, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+fn duplicate<T: Clone>(x: &T) -> (T, T) {
+    (x.clone(), x.clone())
+}
+// syntactic sugar for
+// fn generic_print<T: std::fmt::Display + ?Sized>(x: &T) {
+fn generic_print(x: &(impl std::fmt::Display + ?Sized)) {
+    println!("generically printed: {}", x);
+}
+fn square<T>(x: T) -> T
+where
+    T: std::ops::Mul<Output = T> + Copy,
+{
+    x * x
+}
+fn main() {
+    let s = "hello".to_string();
+    let (s1, s2) = duplicate(&s);
+    println!("s1: {}, s2: {}", s1, s2);
+    generic_print(&123);
+    generic_print("hello");
+    println!("square(8): {}", square(8i8));
+    println!("square(2.5): {}", square(2.5f64));
+}
+```
+
+<!-- column: 1 -->
+
+```
+s1: hello, s2: hello
+generically printed: 123
+generically printed: hello
+square(8): 64
+square(2.5): 6.25
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Uogólnienia
+---
+
+```rust
+trait Square<T> {
+    fn square(self) -> T;
+}
+
+impl<T> Square<T> for T
+where
+    T: std::ops::Mul<Output = T> + Copy,
+{
+    fn square(self) -> T {
+        self * self
+    }
+}
+
+fn main() {
+    println!("{}", 2u8.square());
+    println!("{}", 16.5f32.square());
+}
+```
+
+<!-- end_slide -->
+
+Czasy życia
+---
 
 <!-- end_slide -->
 
 Cargo
 ---
-
 
 <!-- end_slide -->
