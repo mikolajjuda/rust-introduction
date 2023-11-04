@@ -1870,6 +1870,10 @@ let wrapping_0 = std::num::Wrapping(0u8);
 println!("Wrapping({}) + Wrapping(1) = {}", wrapping_255, wrapping_255 + wrapping_1); // 0
 println!("Wrapping({}) - Wrapping(1) = {}", wrapping_0, wrapping_0 - wrapping_1); // 255
 ```
+<!-- end_slide -->
+
+Closures
+---
 
 <!-- end_slide -->
 
@@ -2085,3 +2089,45 @@ Got: 11
 ```
 
 <!-- reset_layout -->
+<!-- end_slide -->
+
+unsafe
+---
+
+```rust
+use std::arch::asm;
+
+unsafe fn dangerous_square(x: u32) -> u64 {
+    let hi: u32;
+    let lo: u32;
+    asm!("mul eax", inlateout("eax") x => lo, out("edx") hi);
+    ((hi as u64) << 32) | (lo as u64)
+}
+
+fn main() {
+    let a = 1000000;
+    let b = unsafe { dangerous_square(a) };
+    println!("{a}^2 = {b}");
+
+    let arr = [1, 2, 3, 4, 5];
+    let p: *const i32 = &arr[0];
+    let x = unsafe { *p.offset(3) };
+    println!("x = {}", x);
+}
+```
+```
+1000000^2 = 1000000000000
+x = 4
+```
+<!-- end_slide -->
+
+async
+---
+
+Patrz przykład `horrible_async.rs`
+
+<!-- end_slide -->
+
+Dokumentacja i testy
+---
+
