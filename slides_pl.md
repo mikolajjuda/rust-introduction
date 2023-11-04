@@ -602,6 +602,34 @@ match c {
 <!-- reset_layout -->
 <!-- end_slide -->
 
+Dopasowanie do wzorca
+---
+
+# `if let`
+
+```rust
+enum Animal {
+    Dog(String),
+    Cat { remaining_lives: u8 },
+    Bird,
+}
+
+fn main() {
+    let animal = Animal::Dog(String::from("Steve"));
+    if let Animal::Dog(name) = animal {
+        println!("Found a dog named {}", name);
+    } else {
+        println!("Some other animal");
+    }
+}
+```
+
+# `while let`
+
+Możemy się domyślić jak działa.
+
+<!-- end_slide -->
+
 Funkcje
 ---
 
@@ -1123,6 +1151,34 @@ is human equal to cloned_human? true
 
 <!-- end_slide -->
 
+Traits
+---
+
+```rust
+struct Human {
+    name: String,
+}
+impl std::fmt::Display for Human {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
+}
+
+trait Speaker: std::fmt::Display {
+    fn speak(&self) {
+        println!("{} says hello", self);
+    }
+}
+impl Speaker for Human {}
+
+fn main(){
+    let human = Human { name: "John".to_string() };
+    human.speak();
+}
+```
+
+<!-- end_slide -->
+
 Uogólnienia
 ---
 
@@ -1218,6 +1274,36 @@ where
 fn main() {
     println!("{}", 2u8.square());
     println!("{}", 16.5f32.square());
+}
+```
+
+<!-- end_slide -->
+
+Polimorfizm dynamiczny
+---
+
+```rust
+struct Human { name: String, }
+struct Dog;
+trait Speaker {
+    fn speak(&self);
+}
+impl Speaker for Human {
+    fn speak(&self) {
+        println!("Hello, my name is {}", self.name);
+    }
+}
+impl Speaker for Dog {
+    fn speak(&self) {  println!("Woof!"); }
+}
+fn main() {
+    let v: Vec<Box<dyn Speaker>> = vec![
+        Box::new(Human { name: "John".to_string() }),
+        Box::new(Dog),
+    ];
+    for s in v.iter() {
+        s.speak();
+    }
 }
 ```
 
@@ -1382,6 +1468,620 @@ fn main() {
 
 <!-- end_slide -->
 
-Cargo
+Mutowalność wnętrza
 ---
 
+```rust
+use std::cell::{Cell, RefCell};
+use std::rc::Rc;
+struct Human {
+    name: RefCell<String>,
+}
+struct Pet {
+    age: Cell<u8>,
+    owner: Rc<Human>,
+}
+fn main() {
+    let human = Rc::new(Human { name: RefCell::new("John".to_string()) });
+    let pet = Pet {
+        age: Cell::new(10),
+        owner: human.clone(), // cloning a reference
+    };
+    std::mem::drop(human); // dropping a reference
+    println!("pet owner name: {}", pet.owner.name.borrow());
+    // we can mutably borrow interior of a RefCell behind an immutable reference
+    pet.owner.name.borrow_mut().push_str("athan");
+    println!("pet owner name: {}", pet.owner.name.borrow());
+
+    // we can't borrow a value behind a Cell
+    let tmp_pet_age = pet.age.get(); // we can get a value
+    println!("pet age: {}", tmp_pet_age);
+    pet.age.set(tmp_pet_age + 1); // we can set a new value
+    println!("pet age: {}", pet.age.get());
+}
+```
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+- Pakiet - zbiór skrzynek
+- Crate - jednostka kompilacji; drzewo modułów, które kompiluje się do pliku wykonywalnego lub biblioteki
+- Moduł - jednostka organizacyjna kodu umożliwiająca kontrolę prywatności
+- Ścieżka - sposób odwoływania się do elementów w drzewie modułów
+
+# Tworzenie projektu
+```
+$ cargo new a
+$ cargo new b --lib
+$ tree
+.
+├── a
+│   ├── Cargo.toml
+│   └── src
+│       └── main.rs
+└── b
+    ├── Cargo.toml
+    └── src
+        └── lib.rs
+```
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+# Uruchamianie projektu
+
+```
+$ tree
+.
+├── Cargo.toml
+└── src
+    └── main.rs
+```
+- `cargo build` - budowanie projektu
+- `cargo run` - budowanie i uruchamianie
+
+```
+$ cargo run
+Compiling my_project v0.1.0 (/path/to/my_project)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.34s
+     Running `target/debug/my_project`
+Hello, world!
+```
+
+Flaga `--release` włącza pełną optymalizecję.
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+# Zależności
+
+Zależności są opisywane w sekcjach `[dependencies]` pliku `Cargo.toml`.
+
+```toml
+[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+random = "*"
+image = { version = "0.24.7", default-features = false, features = ["png"] }
+```
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+# Moduły
+
+```rust
+mod outer {
+    fn private() {
+        println!("outer::private");
+    }
+    pub fn public() {
+        println!("outer::public");
+    }
+    mod inner {
+        fn private() {
+            println!("outer::inner::private");
+        }
+
+        pub fn public() {
+            println!("outer::inner::public");
+            super::private();
+        }
+    }
+}
+fn main() {
+    outer::public();
+}
+```
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+# Widoczność i prywatność
+
+```rust
+mod outer{
+    pub mod inner {
+        #[derive(Default)]
+        pub struct MyStruct{
+            pub my_public_field: u8,
+            pub(super) my_less_public_field: u8,
+            my_private_field: u8,
+        }
+    }
+    fn outer_function(x: inner::MyStruct){
+        println!("{}", x.my_public_field);
+        println!("{}", x.my_less_public_field);
+        println!("{}", x.my_private_field); /* error:
+        field `my_private_field` of struct `MyStruct` is private */
+    }
+}
+
+fn main() {
+    let s = outer::inner::MyStruct::default();
+    println!("{}", s.my_public_field);
+    println!("{}", s.my_less_public_field); /* error:
+    field `my_less_public_field` of struct `MyStruct` is private */
+    println!("{}", s.my_private_field); /* error:
+    field `my_private_field` of struct `MyStruct` is private */
+}
+```
+
+<!-- end_slide -->
+
+Organizacja projektu
+---
+
+# Ścieżki
+
+- względne
+    - `foo` lub `self::foo` odnosi się do `foo` w obecnym module
+    - `super::foo` odnosi się do `foo` w rodzicu
+- bezwzgledne
+    - `crate::foo` odnosi się do `foo` w korzeniu obecnej skrzynki
+    - `bar::foo` odnosi się do `foo` w skrzynce `bar`
+
+# `use`
+
+Słowo kluczowe `use` definuje lokalne przypisania dla symboli z innyh modułów.
+
+```rust
+use std::fmt::Display as Disp;
+use std::collections::{HashMap, HashSet};
+use random::Source;
+```
+
+<!-- end_slide -->
+
+Obsługa błędów
+---
+
+W języku rust błędy są obsługiwane w jawnym przepływie sterowania.
+Funkcje, które mogą zakończyć się niepowodzeniem mają to zapisane w wartości zwracanej.
+
+W przypadku nieoczekiwanych błędów, których nie da się obsłużyć program panikuje (`panic!()`).
+W przypadku paniki zależnie od ustawień kompilatora stos zostaje zwijany (domyślna opcja, destruktory są wywoływane, można złapać)
+lub program zostaje natyczmiatowo przerwany (abort).
+
+Rust domyślnie udostępnia typy służące ustrukturyzowanej obsłudze błędów:
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+
+```rust
+// core::option::Option
+pub enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+<!-- column: 1 -->
+
+```rust
+// core::result::Result
+pub enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Obsługa błędów
+---
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::<i32, String>::new();
+    map.insert(123, "a".to_string());
+    map.insert(321, "b".to_string());
+    match map.get(&666) {
+        Some(n) => println!("{}", n),
+        None => println!("No such key")
+    }
+    let x: &String = map.get(&123).unwrap(); // panics if None
+    println!("{}", x);
+    println!("{}", map[&321]); // panics if no such key
+    println!("{}", map.get(&1000).expect("oops")); // panics on None with a message
+}
+```
+```
+No such key
+a
+b
+thread 'main' panicked at 'oops', src/bin/hashmap_some.rs:16:35
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+```
+
+<!-- end_slide -->
+
+Obsługa błędów
+---
+
+```rust
+fn main() {
+    let mut input = String::new();
+    match std::io::stdin().read_line(&mut input) {
+        Ok(_) => {
+            let trimmed: &str = input.trim();
+            match trimmed.parse::<i8>() {
+                Ok(i) => println!("your integer input: {}", i),
+                Err(e) => println!("parsing error: {}", e),
+            }
+        }
+        Err(_) => panic!("error: unable to read line from stdin"),
+    }
+}
+```
+
+<!-- end_slide -->
+
+Obsługa błędów
+---
+
+```rust
+fn print_str_as_i32(s: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let x: i32 = s.parse()?;
+    println!("{}", x);
+    Ok(())
+}
+
+fn main(){
+    let _ = print_str_as_i32("10");
+}
+```
+<!-- end_slide -->
+
+Konwersja między typami
+---
+
+# Rzutowanie
+
+```rust
+let decimal = 65.99999f64;
+let integer = decimal as u8;
+let character = integer as char;
+println!("{} -> {} -> {}", decimal, integer, character);
+println!("-1i8 as u8 {}", -1i8 as u8);
+println!("1000u32 as u8 {}", 1000u32 as u8);
+println!(" 232i32 as i8 {}", 232i32 as i8);
+println!("-10023f32 as u8 {}", -1023f32 as i8);
+println!("NAN f32 as u8 {}", f32::NAN as u8);
+```
+```
+65.99999 -> 65 -> A
+-1i8 as u8 255
+1000u32 as u8 232
+ 232i32 as i8 -24
+-10023f32 as u8 -128
+NAN f32 as u8 0
+```
+<!-- end_slide -->
+
+Konwersja między typami
+---
+
+# `From` i `Into`
+
+```rust
+#[derive(Debug, Clone)]
+struct Human{ name: String, age: u32 }
+
+#[derive(Debug)]
+struct Dog{ name: String, age: u32 }
+
+impl From<Human> for Dog {
+    fn from(human: Human) -> Self {
+        Dog { name: human.name, age: human.age }
+    }
+}
+fn main() {
+    let human = Human { name: String::from("John"), age: 30 };
+    println!("human: {:?}", human);
+    let dog = Dog::from(human.clone());
+    let dog2: Dog = human.into(); // Into trait implemented for Human automatically
+    println!("dog: {:?}", dog);
+    println!("dog2: {:?}", dog2);
+}
+```
+```
+human: Human { name: "John", age: 30 }
+dog: Dog { name: "John", age: 30 }
+dog2: Dog { name: "John", age: 30 }
+```
+<!-- end_slide -->
+
+Konwersja między typami
+---
+
+# `TryFrom` i `TryInto`
+
+```rust
+let x: i128 = 5637245724782828626582567367;
+match TryInto::<i64>::try_into(x) {
+    Ok(i) => println!("i64 value is {}", i),
+    Err(e) => println!("Error: {}", e),
+}
+
+let x: u16 = 2i8.try_into().unwrap();
+println!("u16 value is {}", x);
+```
+```
+Error: out of range integral type conversion attempted
+u16 value is 2
+```
+<!-- end_slide -->
+
+Przepełnienie przy operacjach arytmetycznych
+---
+
+```rust
+println!("225u8 + 1 = {}", 255u8 + 1); // compile error in debug mode; 0 in release mode
+let x255: u8 = "255".parse().unwrap();
+let x0: u8 = "0".parse().unwrap();
+println!("{} + 1 = {}", x255, x255 + 1); // panic in debug mode; 0 in release mode
+println!("{} - 1 = {}", x0, x0 - 1); // panic in debug mode; 255 in release mode
+println!("{} wrapping_add 1 = {}", x255, x255.wrapping_add(1)); // 0
+println!("{} wrapping_sub 1 = {}", x0, x0.wrapping_sub(1)); // 255
+println!("{} saturating_add 1 = {}", x255, x255.saturating_add(1)); // 255
+println!("{} overflowing_add 1 = {:?}", x255, x255.overflowing_add(1)); // (0, true)
+println!("{} checked_add 1 = {:?}", x255, x255.checked_add(1)); // None
+let wrapping_255 = std::num::Wrapping(255u8);
+let wrapping_1 = std::num::Wrapping(1u8);
+let wrapping_0 = std::num::Wrapping(0u8);
+println!("Wrapping({}) + Wrapping(1) = {}", wrapping_255, wrapping_255 + wrapping_1); // 0
+println!("Wrapping({}) - Wrapping(1) = {}", wrapping_0, wrapping_0 - wrapping_1); // 255
+```
+
+<!-- end_slide -->
+
+Iteratory
+---
+
+```rust
+let v = vec![1, 2, 3];
+let mut iter = v.into_iter(); // into_iter() method from IntoIterator trait
+// methods iter() and iter_mut() iterate over &T and &mut T
+println!("{:?}", iter.next()); // next() method from Iterator trait
+println!("{:?}", iter.next());
+println!("{:?}", iter.next());
+println!("{:?}", iter.next());
+// into_iter() takes ownership; v can't be used here
+```
+```
+Some(1)
+Some(2)
+Some(3)
+None
+```
+
+<!-- column_layout: [1, 1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+let v = vec![1, 2, 3];
+for i in v {
+    println!("{:?}", i);
+}
+```
+
+<!-- column: 1 -->
+
+```
+1
+2
+3
+```
+
+<!-- column: 2 -->
+
+```rust
+let v = vec![1, 2, 3];
+let mut iter = v.into_iter();
+while let Some(x) = iter.next() {
+    println!("{}", x);
+}
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Iteratory
+---
+
+```rust
+let v = vec![1, 2, 3, 4, 5];
+
+let sum_of_squares: u64 = v.iter().map(|x| x * x).sum();
+println!("sum_of_squares: {}", sum_of_squares);
+
+let added_one: Vec<_> = v.iter().map(|x| x + 1).collect();
+println!("added_one: {:?}", added_one);
+
+for (i, x) in added_one.iter().filter(|&&x| x > 2 && x < 5).enumerate() {
+    println!("({}, {})", i, x);
+}
+
+let product= v.iter().chain(added_one.iter()).fold(1, |acc, x| acc * x);
+println!("product: {}", product);
+```
+```
+sum_of_squares: 55
+added_one: [2, 3, 4, 5, 6]
+(0, 3)
+(1, 4)
+product: 86400
+```
+<!-- end_slide -->
+
+Obsługa plików
+---
+
+```rust
+let s = std::fs::read_to_string("in.txt").unwrap();
+std::fs::write("out.txt", s).unwrap();
+```
+```rust
+use std::fs::File;
+use std::io::{BufReader, BufRead, BufWriter, Write};
+
+fn main() {
+    let in_f = File::open("in.txt").unwrap();
+    let out_f = File::create("out.txt").unwrap();
+    let in_buf = BufReader::new(in_f);
+    let mut out_buf = BufWriter::new(out_f);
+    for line in in_buf.lines() {
+        let line = line.unwrap();
+        println!("{}", line);
+        writeln!(out_buf, "{}", line).unwrap();
+    }
+}
+```
+
+Patrz przykład `files_copy_contents.rs`
+
+<!-- end_slide -->
+
+Wątki
+---
+
+<!-- column_layout: [2, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+use std::thread;
+use std::time::Duration;
+
+fn main(){
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("spawned thread: {}", i);
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+    for i in 1..5 {
+        println!("main thread: {}", i);
+        thread::sleep(Duration::from_millis(1));
+    }
+    println!("main thread: done");
+    handle.join().unwrap();
+    println!("main thread: joined");
+}
+```
+
+<!-- column: 1 -->
+
+```
+main thread: 1
+spawned thread: 1
+main thread: 2
+spawned thread: 2
+main thread: 3
+spawned thread: 3
+main thread: 4
+spawned thread: 4
+main thread: done
+spawned thread: 5
+spawned thread: 6
+spawned thread: 7
+spawned thread: 8
+spawned thread: 9
+main thread: joined
+```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+Wątki
+---
+
+<!-- column_layout: [3, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+use std::{time::Duration, sync::{mpsc, Arc, Mutex}, thread};
+fn main() {
+    let m1 = Arc::new(Mutex::new(1));
+    let m2 = m1.clone();
+    let (tx, rx) = mpsc::channel();
+    let t1 = thread::spawn(move || {
+        for _ in 0..10 {
+            {
+                let mut num = m1.lock().unwrap();
+                *num += 1;
+            }
+            thread::sleep(Duration::from_millis(500));
+        }
+    });
+    let t2 = thread::spawn(move || {
+        for _ in 0..10 {
+            thread::sleep(Duration::from_millis(600));
+            let num = m2.lock().unwrap();
+            tx.send(*num).unwrap();
+        }
+    });
+    for received in rx {
+        println!("Got: {}", received);
+    }
+    t1.join().unwrap();
+    t2.join().unwrap();
+}
+```
+
+<!-- column: 1 -->
+
+```
+Got: 3
+Got: 4
+Got: 5
+Got: 6
+Got: 7
+Got: 9
+Got: 10
+Got: 11
+Got: 11
+Got: 11
+```
+
+<!-- reset_layout -->
