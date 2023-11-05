@@ -49,15 +49,15 @@ Popularność
 
 # Firmy i projekty używające języka Rust
 
-- AWS
+- Mozilla
 - Google
-- Huawei
+- AWS
 - Microsoft
+- Huawei
 - Facebook
 - Cloudflare
 - Dropbox
 - Coursera
-- Mozilla
 - Discord
 - Figma
 - Npm
@@ -84,6 +84,23 @@ zajmował pierwsze miejsce jako najbardziej uwielbiany język programowania.
 - 2016: 79.1%
 
 <!-- reset_layout -->
+<!-- end_slide -->
+
+Wprowadzenie
+===
+
+# Instalacja
+
+Rekomendowanym sposobem instalacji narzędzi potrzebnych do korzystania z języka Rust
+jest wykorzystanie narzędzia `rustup` ([rustup](https://rustup.rs/)).
+Zajmuje się ono instalacją zestawów narzędzi w skład których wchodzą m.in.
+- `rustc` - komilator
+- `rustdoc` - generator dokumentacji
+- `cargo` - manadżer pakietów i narzędzie do budowania
+- `clippy` - linter
+- `rustfmt` - formater
+- `rust-std` - biblioteka standardowa
+
 <!-- end_slide -->
 
 Wprowadzenie
@@ -1639,7 +1656,6 @@ fn main() {
     field `my_private_field` of struct `MyStruct` is private */
 }
 ```
-
 <!-- end_slide -->
 
 Organizacja projektu
@@ -1662,6 +1678,31 @@ Słowo kluczowe `use` definuje lokalne przypisania dla symboli z innyh modułów
 use std::fmt::Display as Disp;
 use std::collections::{HashMap, HashSet};
 use random::Source;
+```
+<!-- end_slide -->
+
+Kompilacja warunkowa
+---
+
+```rust
+#[cfg(not(feature = "demo_feature"))]
+fn some_function() {
+    println!("hello");
+}
+
+#[cfg(feature = "demo_feature")]
+fn some_function() {
+    #[cfg(target_os = "linux")]
+    println!("linux");
+    #[cfg(target_os = "windows")]
+    println!("windows");
+    #[cfg(not(any(target_os = "linux", target_os = "windows")))]
+    println!("something else");
+}
+
+fn main() {
+    some_function();
+}
 ```
 
 <!-- end_slide -->
@@ -1874,6 +1915,54 @@ println!("Wrapping({}) - Wrapping(1) = {}", wrapping_0, wrapping_0 - wrapping_1)
 
 Closures
 ---
+
+<!-- column_layout: [4, 2] -->
+
+<!-- column: 0 -->
+
+```rust
+fn run_some_closure<F: Fn(i32) -> i32>(f: &F) {
+    println!("closure with parameter 6 returned {}", f(6));
+}
+fn run_mut_closure<F: FnMut(i32)>(f: &mut F) {
+    f(12);
+}
+fn run_once_closure<F: FnOnce() -> String>(f: F) {
+    println!("we own string: {}", f());
+}
+fn main() {
+    let plus_one = |x: i32| x + 1;
+    run_some_closure(&plus_one);
+    let a = 20;
+    run_some_closure(&|x| x + a);
+    let mut b = 10;
+    println!("b before calling closure: {}", b);
+    run_mut_closure(&mut |x| { b += x; });
+    println!("b after calling closure: {}", b);
+    let s = "hello".to_string();
+    let owns_string = move || { // s is moved into the closure
+        println!("string: {}", s);
+        s
+    };
+    // s is invalid here
+    println!("before closure");
+    run_once_closure(owns_string);
+    println!("after closure");
+}
+```
+
+<!-- column: 1 -->
+
+```
+closure with parameter 6 returned 7
+closure with parameter 6 returned 26
+b before calling closure: 10
+b after calling closure: 22
+before closure
+string: hello
+we own string: hello
+after closure
+```
 
 <!-- end_slide -->
 
@@ -2131,3 +2220,94 @@ Patrz przykład `horrible_async.rs`
 Dokumentacja i testy
 ---
 
+```rust
+/**
+ * This function adds two numbers.
+ * # Examples
+ * 
+ * ```
+ * let x = 5;
+ * let y = 3;
+ * assert_eq!(8, add_numbers(x, y));
+ * ```
+ * ## this is markdown text
+ * **bold** *italic*
+ * - list1
+ * - list2
+ */
+pub fn add_numbers(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[test]
+fn test_add_numbers() {
+    assert_eq!(8, add_numbers(5, 3));
+}
+```
+
+<!-- end_slide -->
+
+Makra
+---
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+```rust
+macro_rules! print_items {
+    ($($x:expr),*) => {
+        $(
+            println!("{}", $x);
+        )*
+    };
+}
+
+fn main() {
+    let x = 5;
+    print_items!(-2010, 12u8, 82, "a", x);
+    print_items!("Hello", "World", "!");
+}
+```
+
+<!-- column: 1 -->
+
+```
+-2010
+12
+82
+a
+5
+Hello
+World
+!
+```
+
+<!-- reset_layout -->
+
+Oprócz makr deklaratywnych Rust obsługuje także makra proceduralne,
+które są pełnoprawnymi funkcjami transformującymi strumień tokenów,
+wykonywanymi na etapie komilacji.
+<!-- end_slide -->
+
+Zasoby edukacyjne
+===
+
+- "The Rust Programming Language" ([The Book](https://doc.rust-lang.org/stable/book/))
+- "Rust by Example" (<https://doc.rust-lang.org/stable/rust-by-example/>)
+- "Comprehensive Rust" (<https://google.github.io/comprehensive-rust/>)
+
+Inne zasoby są także opisane na <https://www.rust-lang.org/learn>
+
+<!-- end_slide -->
+
+Przykłady praktyczne
+===
+
+<!-- end_slide -->
+
+Koniec
+===
+
+# Koniec
+Koniec
