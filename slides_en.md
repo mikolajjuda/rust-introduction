@@ -1,14 +1,14 @@
 ---
 title: Rust
-sub_title: Szybki przegląd i wprowadzenie
+sub_title: Quick overview and introduction
 author: Mikołaj Juda
 ---
 
-Przegląd
+Overview
 ===
 
-Rust jest kompilowanym, wieloparadygmatowym językiem ogólnego przeznaczenia
-skupiającym się, między innymi, na bezpieczeństwie, niezawodności i wydajności.
+Rust is a compiled, multi-paradigm, general-purpose programing language
+focusing on (among others) security, reliability and performance
 
 <!-- column_layout: [3, 2] -->
 
@@ -18,36 +18,37 @@ skupiającym się, między innymi, na bezpieczeństwie, niezawodności i wydajno
 
 <!-- column: 0 -->
 
-## ważne cechy:
-- bezpieczeństwo pamięci bez potrzeby automatycznego odśmiecania
-- zapobieganie wyścigom danych między wątkami
-- silny system typów inspirowany językami funkcyjnymi (bazuje na nim obsługa błędów)
-- możliwość programowania niskopoziomowego (wskaźniki, unsafe, inline assembly)
-- interoperacyjność z językiem C (i nie tylko)
-- makra (deklaratywne i proceduralne)
-- wydajność porównywalna z językiem C
-- użycie infrastruktury LLVM
-- z kompilatorem dostarczany jest menadżer pakietów Cargo zintegrowany z repozytorium [crates.io](https://crates.io) (i inne narzędzia)
+## important features:
+- memory safety without the need for automatic runtime garbage collection
+- prevention of data races between threads
+- strong type system inspired by functional languages (foundation of error handling)
+- low level programming features (pointers, unsafe, inline assembly)
+- interoperability with C (aand other languages)
+- macros (declarative and procedural)
+- performance comparable with C
+- use of LLVM infrastructure
+- Cargo package manager integratd with [crates.io](https://crates.io) repository (and other tools)
+shipped with the compiler
 
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Maskotka
+Mascot
 ---
-Maskotką języka Rust jest krab Ferris.
+Crab Ferris is an unofficial mascot for Rust.
 
 ![](ferris.png)
 
 <!-- end_slide -->
 
-Popularność
+Popularity
 ---
 
 <!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
 
-# Firmy i projekty używające języka Rust
+# Companies and projects using Rust
 
 - Mozilla
 - Google
@@ -71,8 +72,8 @@ i wiele innych
 
 # Stack Overflow Development Survey
 
-Przez ostatnie 8 lat (2016-2023) Rust
-zajmował pierwsze miejsce jako najbardziej uwielbiany język programowania.
+For the last 8 years (2016-2023) Rust
+was voted the most loved programming language.
 
 - 2023: 84.66%
 - 2022: 86.73%
@@ -86,24 +87,24 @@ zajmował pierwsze miejsce jako najbardziej uwielbiany język programowania.
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Wprowadzenie
+Introduction
 ===
 
-# Instalacja
+# Installation
 
-Rekomendowanym sposobem instalacji narzędzi potrzebnych do korzystania z języka Rust
-jest wykorzystanie narzędzia `rustup` ([rustup](https://rustup.rs/)).
-Zajmuje się ono instalacją zestawów narzędzi w skład których wchodzą m.in.
-- `rustc` - komilator
-- `rustdoc` - generator dokumentacji
-- `cargo` - manadżer pakietów i narzędzie do budowania
+The recommended way to install tools required to use Rust
+is by using the `rustup` tool ([rustup](https://rustup.rs/)).
+It manages toolchains which include:
+- `rustc` - compiler
+- `rustdoc` - documentation generator
+- `cargo` - package manager and build tool
 - `clippy` - linter
-- `rustfmt` - formater
-- `rust-std` - biblioteka standardowa
+- `rustfmt` - formatter
+- `rust-std` - standard library
 
 <!-- end_slide -->
 
-Wprowadzenie
+Introduction
 ===
 
 # Hello World
@@ -113,68 +114,68 @@ fn main() {
 }
 ```
 
-# Kompilacja
+# Compilation
 
 ```
 $ rustc hello_world.rs
 $ ./hello_world
 Hello, world! 🦀
 ```
-W większości przypadków używanie narzędzia Cargo do budowania projektów jest preferowane od bezpośredniego wywoływania kompilatora.
+In most cases building the project using Cargo is preferable to using the compiler directly.
 
 <!-- end_slide -->
 
-Typy proste
+Primitive types
 ---
 
 <!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
 
-# Typy liczbowe
+# Numeric types
 
-## Liczby całkowite
-| **rozmiar**       | **ze znakiem** | **bez znaku** |
-|-------------------|----------------|---------------|
-| 8                 | `i8`           | `u8`          |
-| 16                | `i16`          | `u16`         |
-| 32                | `i32`          | `u32`         |
-| 64                | `i64`          | `u64`         |
-| 128               | `i128`         | `u128`        |
-| rozmiar wskaźnika | `isize`        | `usize`       |
+## Integers
+| **size**     | **signed** | **unsigned** |
+|--------------|------------|--------------|
+| 8            | `i8`       | `u8`         |
+| 16           | `i16`      | `u16`        |
+| 32           | `i32`      | `u32`        |
+| 64           | `i64`      | `u64`        |
+| 128          | `i128`     | `u128`       |
+| pointer size | `isize`    | `usize`      |
 
-Liczby ze znakiem używają kodu uzupełnień do dwóch.
+Signed integers are represented using two's compliment.
 
-## Liczby zmiennoprzecinkowe
-Typy `f32` oraz `f64` zgodne ze standardem IEEE 754-2008.
+## Floating point numbers
+Types `f32` and `f64` compliant with the IEEE 754-2008 standard.
 
-# Typ "nigdy" `!`
-- nie ma możliwych wartości
-- obecnie niestabilny, zamiast niego jest używany `Infallible` (pusty enum)
+# Never type `!`
+- no possible values
+- currently unstable, `Infallible` (empty enum) used instead
 
 <!-- column: 1 -->
 
-# Typ logiczny `bool`
+# Logical type `bool`
 
-# Typy tekstowe
+# Textual types
 
 ## `char`
-- zajmuje 4 bajty
-- reprezentuje wartość skalarną Unikodu
+- takes 4 bytes
+- represents a Unicode scalar value
 
-## Wycinek napisu `str`
-- `[u8]` z dodatkowym założeniem poprawności jako zakodowanie ciągu wartości skalarnych Unikodu w UTF-8
-- zwykle używany poprzez typy wskaźnikowe np. `&str`
+## string slice `str`
+- `[u8]` with extra assumption that it's a valid UTF-8
+- usually used behind pointer types e.g. `&str`
 
-# Typ jednostkowy `()`
-- pusta krotka
-- zerowy rozmiar
-- jedna możliwa wartość
+# Unit type `()`
+- empty tuple
+- zero size
+- one possible value
 
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Zmienne
+Variables
 ---
 
 ```rust
@@ -205,34 +206,34 @@ fn main() {
 
 <!-- end_slide -->
 
-Typy sekwencyjne
+Sequence types
 ---
 
-# Krotki `(T1, T2, T3, /*etc.*/)`
-- lista wartości o różnych typach
-- stała długość
-- Przykłady:
+# Tuples `(T1, T2, T3, /*etc.*/)`
+- list of values with different types
+- constant length
+- Examples:
     - ()
     - (u8,)
     - (i64, i64)
     - ((), u8, f32)
-- pola nazywane używając kolejnych liczb całkowitych odpowiadających pozycji w liście typów: `0`, `1`, `2` itp.
+- fields named using increasing integers matching their position in the list of types: `0`, `1`, `2` etc.
 
-# Tablice `[T; N]`
-- lista długości `N` wartości o tym samym typie `T`
-- sprawdznie poprawności dostępu do elementów tablicy na etapie kompilacji i podczes działania programu
+# Arrays `[T; N]`
+- fixed-size sequence of `N` of type `T`
+- bound-checked during compile time and runtime
 
-# Wycinki `[T]`
-- typ o dynamicznym rozmiarze reprezentujący "widok" na listę elementów typu `T`
-- zwykle używany poprzez typy wskaźnikowe
-- sprawdznie poprawności dostępu do elementów tablicy na etapie kompilacji i podczes działania programu
+# Slices `[T]`
+- dynamically sized type representing a view into a sequence of elements of type `T`
+- usually used behind a pointer type
+- bound-checked during compile time and runtime
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
-# Bloki
+# Blocks
 ```rust
 let x = -2;
 {
@@ -253,7 +254,7 @@ println!("y is {}", y); // y is 6
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
 # `if`
@@ -277,7 +278,7 @@ y is 2
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
 # `loop`
@@ -297,7 +298,7 @@ first power of 2 greater than 10 is 16
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
 # `while`
@@ -316,7 +317,7 @@ a is 3
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
 # `for`
@@ -342,10 +343,10 @@ horse
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
-# Etykiety
+# Labels
 
 ```rust
 'outer: loop {
@@ -370,7 +371,7 @@ println!("a is {}", a);
 
 <!-- end_slide -->
 
-Przepływ sterowania
+Control flow
 ---
 
 # `continue`
@@ -388,15 +389,15 @@ for i in 0..=5 {
 
 <!-- end_slide -->
 
-Typy definiowane przez użytkownika
+User-defined types
 ---
 
-# Struktury
+# Structs
 
 <!-- column_layout: [1, 1] -->
 <!-- column: 0 -->
 
-## Struktury z nazwanymi polami
+## Structs with named fields
 ```rust
 struct StructName {
     field1: T1,
@@ -405,29 +406,29 @@ struct StructName {
     // etc.
 }
 ```
-podobne do struktur w C
+similar to C structs
 
 <!-- column: 1 -->
 
-## Struktury krotkowe
+## Tuple structs
 ```rust
 struct StructName(T1, T2, T3, /*etc.*/);
 ```
-podobne do krotek
+similar to tuples
 
-## Struktury jednostkowe
+## Unit structs
 ```rust
 struct StructName;
 ```
-podobne do `()`
+similar to `()`
 
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Typy definiowane przez użytkownika
+User-defined types
 ---
 
-# Typy wyliczeniowe
+# Enums
 ```rust
 enum EnumName {
     Variant1,       // implicit discriminant 0
@@ -437,7 +438,7 @@ enum EnumName {
 }
 
 ```
-podobne do typów wyliczniowych w C
+similar to C enums
 ```rust
 enum NumName {
     Variant1,
@@ -447,14 +448,14 @@ enum NumName {
     // etc.
 }
 ```
-podobne do tzw. rekordu z wariantami
+tagged union
 
 <!-- end_slide -->
 
-Typy definiowane przez użytkownika
+User-defined types
 ---
 
-# Unie
+# Unions
 
 ```rust
 union StructName {
@@ -464,14 +465,14 @@ union StructName {
     // etc.
 }
 ```
-- podobne do unii w C
-- jak struktury, ale pola dzielą pamięć
-- dostęp do elementów jest niebezpieczny
-- pewne ograniczenia typów pól
+- similar to C unions
+- like structures, but fields share memory
+- access to elements is unsafe
+- some limitations for types of fields
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 ```rust
@@ -498,7 +499,7 @@ b is 1
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 ```rust
@@ -526,7 +527,7 @@ red: 64, green: 0, blue: 0
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 ```rust
@@ -548,7 +549,7 @@ a: 10, c: false, d: 0.1, e: Σ
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 ```rust
@@ -568,7 +569,7 @@ a: 1, b: 2, c: 3, d: 4, e: 5
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 <!-- column_layout: [1, 2] -->
@@ -619,7 +620,7 @@ match c {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Dopasowanie do wzorca
+Pattern matching
 ---
 
 # `if let`
@@ -643,11 +644,11 @@ fn main() {
 
 # `while let`
 
-Możemy się domyślić jak działa.
+We can guess how it works.
 
 <!-- end_slide -->
 
-Funkcje
+Functions
 ---
 
 ```rust
@@ -669,34 +670,34 @@ fn is_nonnegative(x: i32) -> bool {
 ```
 <!-- end_slide -->
 
-Typy wskaźnikowe
+Pointer types
 ---
 
-# Referencje
-Referencje to wskaźniki do pamięci będącej własnością innej wartości.
-Borrow checker zapewnia poprawność wszystkich referencji.
+# References
+References are pointers to memory owned by another value.
+Borrow checker ensures that all references are valid.
 
-## Referencje współdzielone `&T`
-- uniemożliwiają bezpośrednią modyfikację wskazywanej wartości
-- mogą być kopiowane
+## Shared references `&T`
+- prevents direct mutation of a value
+- can be copied
 
-## Referencje mutowalne `&mut T`
-- umożliwia bezpośrednią modyfikację wskazywanej wartości
-- w jednym momencie może istnieć tylko jedna referencja mutowalna do danej wartości
+## Mutable references `&mut T`
+- allows for direct mutation of a value
+- only one mutable reference can exists for the same value
 
-# Surowe wskaźniki `*const T` i `*mut T`
-- brak żadnych gwarancji poprawności i bezpieczeństwa
-- dereferencja surowego wskaźnika jest niebezpieczna
+# Raw pointers `*const T` i `*mut T`
+- no guarantees of validity and safety
+- dereferencing raw pointer is unsafe
 
-Referencje i wskaźniki na typy o dynamicznym rozmiarze stają się wskaźnikami szerokimi (mają dodatkową informację o rozmiarze).
+References and pointers to dynamically sized types become wide pointers (have additional size information).
 
 <!-- end_slide -->
 
-Niektóre typy z biblioteki standardowej
+Some `std` types
 ---
 
 # `Vec`
-kontener sąsiadującej pamięci o zmiennym rozmiarze na dane tego samego typu
+growable container of contiguous memory for values of the same type
 ```rust
 let mut vec = Vec::new();
 vec.push(1);
@@ -705,7 +706,7 @@ println!("{:?}", vec);
 ```
 
 # `String`
-napis w kodowaniu UTF-8 o zmiennym rozmiarze
+growable UTF-8 encoded string
 ```rust
 let mut string: String = "Hello".to_string();
 string.push_str(" world");
@@ -715,16 +716,16 @@ println!("{}", string);
 
 <!-- end_slide -->
 
-Własność
+Ownership
 ---
 
-Zamiast zmuszać programistę do ręcznego alokowania i zwalniania pamięci lub polegać na odśmiecaniu przez garbage collector,
-Rust do zarządzania pamięcią wykorzystuje system własności z zestawem reguł sprawdzanych przez kompilator.
+Instead of forcing the programmer to manually allocate and release memory or relying on a garbage collector,
+Rust uses a system of ownership with a set of rules checked by the compiler that govern memory management.
 
-# Zasady systemu własności
-- Każda wartość ma właściciela.
-- W danym momencie może istnieć tylko jeden właściciel (dla danej wartości).
-- Kiedy właściciel wychodzi z zasięgu, posiadana przez niego wartość zostaje zwolniona.
+# Ownership rules
+- Each value has an owner.
+- There can be only one owner at a time (for a single value).
+- When the owner goes out of scope, the value will be dropped.
 
 ```rust
 { // x is not in scope yet
@@ -741,7 +742,7 @@ Rust używa wzorca RAII.
 
 <!-- end_slide -->
 
-Semantyka przenoszenia
+Move semantics
 ---
 
 ```rust
@@ -765,7 +766,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Semantyka przenoszenia
+Move semantics
 ---
 
 ```rust
@@ -794,20 +795,19 @@ fn main() {
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
-Operacje na wartościach można wykonywać bez przejmowania nad nimi własności używając referencji.
-Tworzenie referencji nazywa się *pożyczaniem*.
+Values can be accessed without taking ownership over them by using references.
+The action of creating a reference is called *borrownig*.
 
 # Zasady dotyczące referencji
-- W każdym momencie może istnieć *albo* dowolna ilość referencji współdzielonych
-*albo* jedna referencja mutowalna (dla danej wartości).
-- Referencje zawsze muszą być prawidłowe
+- At any given time there can be *either* any number of immutable references *or*  one mutable reference.
+- References have to be valid.
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
 ```rust
@@ -837,7 +837,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
 ```rust
@@ -868,7 +868,7 @@ println!("{}", r2);
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
 ```rust
@@ -889,7 +889,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
 ```rust
@@ -906,7 +906,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Pożyczanie
+Borrowing
 ---
 
 # Wycinki
@@ -997,7 +997,7 @@ age difference is -121
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Metody i funkcje powiązane
+Methods and associated functions
 ---
 
 <!-- column_layout: [1, 1] -->
@@ -1118,22 +1118,22 @@ Is the cat alive? true
 Traits
 ---
 
-# Niektóre cechy wbudowane
-- Debug - umożliwia formatowanie w kontekście debugowania
-- Display - umożliwia "ładne" formatowanie
-- Clone - umożliwia klonowanie (metoda `clone`)
-- Copy - typ jest kopiowany zamiast przenoszenia
-- Drop - destruktor (metoda `drop`)
-- Deref i DerefMut - przeładowania operatora `*`
-- Default - domyślne wartości (funkcja `default`)
-- Eq - porównanie będące relacją równoważności
-- PartialEq - jak Eq, ale porównania nie muszą być zwrotne
-- Ord - porządek liniowy
-- PartialOrd - porządek częściowy
-- Hash - umożliwia hashowanie
-- Send - wartość może być wysyłana między wątkami
-- Sync - wartość może być dzielona między wątkami
-- Sized - rozmiar znany na etapie kompilacji
+# Some built-in traits
+- Debug - formatting in a debugging context
+- Display - "nice" formatting
+- Clone - cloning (`clone` method)
+- Copy - type is copied instead of moved
+- Drop - destructor (`drop` method)
+- Deref and DerefMut - `*` operator overloading
+- Default - default values (`default` function)
+- Eq - comparison which is an equivalence relation
+- PartialEq - like Eq, but comparisons do not have to be reflexive
+- Ord - linear order
+- PartialOrd - partial order
+- Hash - hashing
+- Send - value can be sent between threads
+- Sync - value can be shared between threads
+- Sized - size known at compile time
 
 <!-- end_slide -->
 
@@ -1196,7 +1196,7 @@ fn main(){
 
 <!-- end_slide -->
 
-Uogólnienia
+Generics
 ---
 
 ```rust
@@ -1225,7 +1225,7 @@ p3.special_x(): idk why Strings but here you go: hello
 
 <!-- end_slide -->
 
-Uogólnienia
+Generics
 ---
 
 <!-- column_layout: [2, 1] -->
@@ -1271,7 +1271,7 @@ square(2.5): 6.25
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Uogólnienia
+Generics
 ---
 
 ```rust
@@ -1296,7 +1296,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Polimorfizm dynamiczny
+Dynamic dispatch
 ---
 
 ```rust
@@ -1326,10 +1326,10 @@ fn main() {
 
 <!-- end_slide -->
 
-Czasy życia
+Lifetimes
 ---
 
-Czasy życia to konstrukt kompilatora używany do sprawdzania poprawności pożyczeń.
+Lifetimes are compiler constructs used for ensuring that all borrows are valid.
 
 <!-- column_layout: [1, 1] -->
 
@@ -1379,10 +1379,10 @@ fn main() {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Czasy życia
+Lifetimes
 ---
 
-# Czasy życia w wywołaniach funkcji
+# Lifetimes in function calls
 
 ```rust
 fn longest_str(x: &str, y: &str) -> &str { /*compiler error:
@@ -1403,7 +1403,7 @@ fn main() {
 ```
 <!-- end_slide -->
 
-Czasy życia
+Lifetimes
 ---
 
 ```rust
@@ -1422,19 +1422,17 @@ fn main() {
     println!("The longest string is {}", result);
 }
 ```
-Sygnatura funkcji oznacza teraz, że dla jakiegoś czasu życia `'a` funkcja `longest_str` pożycza dwa wycinki napisów,
-które żyją *przynajmniej* tak długo jak `'a` i zwraca referencję do wycinka napisu,
-który także żyje *przynajmniej* tak długo jak `'a`.
-Kompilator sam znajdzie taki czas życia.
-W tym przypadku oznacza to, że wartość wskazywana przez zwracaną referencję,
-żyje tak długo jak krócej żyjąca spośród wartości wskazywanych przez referencje w parametrach.
+The function signature now indicates that for some lifetime `'a` the function borrows two
+string slices that live *at least* as long as `'a` and returns a reference to a string slice
+that also lives *at least* as long as `'a`. In this case it means that the value referenced by
+a returned reference lives as long as shorter-lived of the two input string slices.
 
 <!-- end_slide -->
 
-Czasy życia
+Lifetimes
 ---
 
-# Czasy życia w strukturach danych
+# Lifetimes in data structures
 
 ```rust
 struct Human {
@@ -1460,7 +1458,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Czasy życia
+Lifetimes
 ---
 
 # `'static`
@@ -1485,7 +1483,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Mutowalność wnętrza
+Interior mutability
 ---
 
 ```rust
@@ -1520,15 +1518,15 @@ fn main() {
 
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-- Pakiet - zbiór skrzynek
-- Crate - jednostka kompilacji; drzewo modułów, które kompiluje się do pliku wykonywalnego lub biblioteki
-- Moduł - jednostka organizacyjna kodu umożliwiająca kontrolę prywatności
-- Ścieżka - sposób odwoływania się do elementów w drzewie modułów
+- package - collection of crates
+- Crate - compilation unit; tree of modules that compile to a library or an executable
+- Module - code organisation unit allowing for control of scope and privacy
+- Path - a way of referencing an item in a module tree
 
-# Tworzenie projektu
+# Project creation
 ```
 $ cargo new a
 $ cargo new b --lib
@@ -1546,10 +1544,10 @@ $ tree
 
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-# Uruchamianie projektu
+# Running a project
 
 ```
 $ tree
@@ -1573,12 +1571,12 @@ Flaga `--release` włącza pełną optymalizecję.
 
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-# Zależności
+# Dependencies
 
-Zależności są opisywane w sekcjach `[dependencies]` pliku `Cargo.toml`.
+Dependencies are described in `[dependencies]` section of `Cargo.toml` file.
 
 ```toml
 [package]
@@ -1593,10 +1591,10 @@ image = { version = "0.24.7", default-features = false, features = ["png"] }
 
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-# Moduły
+# Modules
 
 ```rust
 mod outer {
@@ -1624,10 +1622,10 @@ fn main() {
 
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-# Widoczność i prywatność
+# Visibility and privacy
 
 ```rust
 mod outer{
@@ -1658,21 +1656,21 @@ fn main() {
 ```
 <!-- end_slide -->
 
-Organizacja projektu
+Project organisation
 ---
 
-# Ścieżki
+# Paths
 
-- względne
-    - `foo` lub `self::foo` odnosi się do `foo` w obecnym module
-    - `super::foo` odnosi się do `foo` w rodzicu
-- bezwzgledne
-    - `crate::foo` odnosi się do `foo` w korzeniu obecnej skrzynki
-    - `bar::foo` odnosi się do `foo` w skrzynce `bar`
+- relative
+    - `foo` or `self::foo` references `foo` in the current module
+    - `super::foo` references `foo` in the parent module
+- absolute
+    - `crate::foo` references `foo` in the root of the current crate
+    - `bar::foo` references `foo` in a `bar` crate
 
 # `use`
 
-Słowo kluczowe `use` definuje lokalne przypisania dla symboli z innyh modułów.
+`use` keyword defines local bindings to symbols from different modules.
 
 ```rust
 use std::fmt::Display as Disp;
@@ -1681,7 +1679,7 @@ use random::Source;
 ```
 <!-- end_slide -->
 
-Kompilacja warunkowa
+Conditional compilation
 ---
 
 ```rust
@@ -1707,17 +1705,18 @@ fn main() {
 
 <!-- end_slide -->
 
-Obsługa błędów
+Error handling
 ---
 
-W języku Rust błędy są obsługiwane w jawnym przepływie sterowania.
-Funkcje, które mogą zakończyć się niepowodzeniem mają to zapisane w wartości zwracanej.
+In Rust errors are handled using explicit control flow.
+Functions that can have errors list this in their return type.
 
-W przypadku nieoczekiwanych błędów, których nie da się obsłużyć program panikuje (`panic!()`).
-W przypadku paniki zależnie od ustawień kompilatora stos zostaje zwijany (domyślna opcja, destruktory są wywoływane, można złapać)
-lub program zostaje natychmiatowo przerwany (abort).
+In case of unexpected unrecoverable error program panics (`panic!()`).
+In case of a panic, depending on a compiler settings, stack gets unwound
+(default option, destructors are called, unwinding can be caught)
+or program is immediately aborted.
 
-Rust domyślnie udostępnia typy służące ustrukturyzowanej obsłudze błędów:
+Rust exposes two types for structured error handling:
 <!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
@@ -1744,7 +1743,7 @@ pub enum Result<T, E> {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Obsługa błędów
+Error handling
 ---
 
 ```rust
@@ -1774,7 +1773,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 <!-- end_slide -->
 
-Obsługa błędów
+Error handling
 ---
 
 ```rust
@@ -1795,7 +1794,7 @@ fn main() {
 
 <!-- end_slide -->
 
-Obsługa błędów
+Error handling
 ---
 
 ```rust
@@ -1811,10 +1810,10 @@ fn main(){
 ```
 <!-- end_slide -->
 
-Konwersja między typami
+Type conversions
 ---
 
-# Rzutowanie
+# Casting
 
 ```rust
 let decimal = 65.99999f64;
@@ -1837,10 +1836,10 @@ NAN f32 as u8 0
 ```
 <!-- end_slide -->
 
-Konwersja między typami
+Type conversions
 ---
 
-# `From` i `Into`
+# `From` and `Into`
 
 ```rust
 #[derive(Debug, Clone)]
@@ -1870,10 +1869,10 @@ dog2: Dog { name: "John", age: 30 }
 ```
 <!-- end_slide -->
 
-Konwersja między typami
+Type conversions
 ---
 
-# `TryFrom` i `TryInto`
+# `TryFrom` and `TryInto`
 
 ```rust
 let x: i128 = 5637245724782828626582567367;
@@ -1891,7 +1890,7 @@ u16 value is 2
 ```
 <!-- end_slide -->
 
-Przepełnienie przy operacjach arytmetycznych
+Overflows in arithmetic operation
 ---
 
 ```rust
@@ -1966,7 +1965,7 @@ after closure
 
 <!-- end_slide -->
 
-Iteratory
+Iterators
 ---
 
 ```rust
@@ -2018,7 +2017,7 @@ while let Some(x) = iter.next() {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Iteratory
+Iterators
 ---
 
 ```rust
@@ -2046,7 +2045,7 @@ product: 86400
 ```
 <!-- end_slide -->
 
-Obsługa plików
+File handling
 ---
 
 ```rust
@@ -2070,11 +2069,11 @@ fn main() {
 }
 ```
 
-Patrz przykład `files_copy_contents.rs`
+See example `files_copy_contents.rs`
 
 <!-- end_slide -->
 
-Wątki
+Threads
 ---
 
 <!-- column_layout: [2, 1] -->
@@ -2125,7 +2124,7 @@ main thread: joined
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Wątki
+Threads
 ---
 
 <!-- column_layout: [3, 1] -->
@@ -2213,11 +2212,11 @@ x = 4
 async
 ---
 
-Patrz przykład `horrible_async.rs`
+See example `horrible_async.rs`
 
 <!-- end_slide -->
 
-Dokumentacja i testy
+Documentation and test
 ---
 
 ```rust
@@ -2247,7 +2246,7 @@ fn test_add_numbers() {
 
 <!-- end_slide -->
 
-Makra
+Macros
 ---
 
 <!-- column_layout: [1, 1] -->
@@ -2285,12 +2284,11 @@ World
 
 <!-- reset_layout -->
 
-Oprócz makr deklaratywnych Rust obsługuje także makra proceduralne,
-które są pełnoprawnymi funkcjami transformującymi strumień tokenów,
-wykonywanymi na etapie komilacji.
+Rust also supports procedural macros.
+Proc macros are full-fledged functions, executed at compile time, that transform a token stream.
 <!-- end_slide -->
 
-Zasoby edukacyjne
+Educational Resources
 ===
 
 - "The Rust Programming Language" ([The Book](https://doc.rust-lang.org/stable/book/))
@@ -2298,17 +2296,17 @@ Zasoby edukacyjne
 - "Comprehensive Rust" (<https://google.github.io/comprehensive-rust/>)
 - "The Rust Reference" (<https://doc.rust-lang.org/stable/reference/>)
 
-Inne zasoby są także opisane na <https://www.rust-lang.org/learn>
+More resources are described at <https://www.rust-lang.org/learn>
 
 <!-- end_slide -->
 
-Przykłady praktyczne
+Practical example
 ===
 
 <!-- end_slide -->
 
-Koniec
+The end
 ===
 
-# Koniec
-Koniec
+# The end
+The end
