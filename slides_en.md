@@ -2,6 +2,11 @@
 title: Rust
 sub_title: Quick overview and introduction
 author: Mikołaj Juda
+theme:
+  override:
+   footer:
+    style: template
+    right: "{current_slide} / {total_slides}"
 ---
 
 Overview

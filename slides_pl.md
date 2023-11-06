@@ -2,6 +2,11 @@
 title: Rust
 sub_title: Szybki przegląd i wprowadzenie
 author: Mikołaj Juda
+theme:
+  override:
+   footer:
+    style: template
+    right: "{current_slide} / {total_slides}"
 ---
 
 Przegląd
