@@ -99,9 +99,9 @@ Wprowadzenie
 Rekomendowanym sposobem instalacji narzędzi potrzebnych do korzystania z języka Rust
 jest wykorzystanie narzędzia `rustup` ([rustup](https://rustup.rs/)).
 Zajmuje się ono instalacją zestawów narzędzi w skład których wchodzą m.in.
-- `rustc` - komilator
+- `rustc` - kompilator
 - `rustdoc` - generator dokumentacji
-- `cargo` - manadżer pakietów i narzędzie do budowania
+- `cargo` - menadżer pakietów i narzędzie do budowania
 - `clippy` - linter
 - `rustfmt` - formater
 - `rust-std` - biblioteka standardowa
@@ -196,7 +196,7 @@ fn main() {
     let _żółć: (); // underscore prefix suppresses unused variable warning
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
-    𐐘 = 5; // variables can be initialised after declaration
+    𐐘 = 5; // variables can be initialized after declaration
     println!("a = {}\n", a);
     let a = 0.5f64; // shadowing
     println!("𐐘 = {}", 𐐘);
@@ -225,12 +225,12 @@ Typy sekwencyjne
 
 # Tablice `[T; N]`
 - lista długości `N` wartości o tym samym typie `T`
-- sprawdznie poprawności dostępu do elementów tablicy na etapie kompilacji i podczes działania programu
+- sprawdzanie poprawności dostępu do elementów tablicy na etapie kompilacji i podczas działania programu
 
 # Wycinki `[T]`
 - typ o dynamicznym rozmiarze reprezentujący "widok" na listę elementów typu `T`
 - zwykle używany poprzez typy wskaźnikowe
-- sprawdznie poprawności dostępu do elementów tablicy na etapie kompilacji i podczes działania programu
+- sprawdzanie poprawności dostępu do elementów tablicy na etapie kompilacji i podczas działania programu
 
 <!-- end_slide -->
 
@@ -436,13 +436,13 @@ Typy definiowane przez użytkownika
 ```rust
 enum EnumName {
     Variant1,       // implicit discriminant 0
-    Variant2 = 123, // explicit disscriminant 123
+    Variant2 = 123, // explicit discriminant 123
     Variant3,       // implicit discriminant 124
     // etc.
 }
 
 ```
-podobne do typów wyliczniowych w C
+podobne do typów wyliczeniowych w C
 ```rust
 enum NumName {
     Variant1,
@@ -791,7 +791,7 @@ fn print_and_return_string(s: String) -> String {
 
 fn main() {
     let s = "hello".to_string();
-    // ownership transfered to function and then back to new s
+    // ownership transferred to function and then back to new s
     let s = print_and_return_string(s);
     print_and_return_string(s);
 }
@@ -1135,7 +1135,7 @@ Traits
 - PartialEq - jak Eq, ale porównania nie muszą być zwrotne
 - Ord - porządek liniowy
 - PartialOrd - porządek częściowy
-- Hash - umożliwia hashowanie
+- Hash - umożliwia haszowanie
 - Send - wartość może być wysyłana między wątkami
 - Sync - wartość może być dzielona między wątkami
 - Sized - rozmiar znany na etapie kompilacji
@@ -1574,7 +1574,7 @@ Compiling my_project v0.1.0 (/path/to/my_project)
 Hello, world!
 ```
 
-Flaga `--release` włącza pełną optymalizecję.
+Flaga `--release` włącza pełną optymalizację.
 
 <!-- end_slide -->
 
@@ -1677,7 +1677,7 @@ Organizacja projektu
 
 # `use`
 
-Słowo kluczowe `use` definuje lokalne przypisania dla symboli z innyh modułów.
+Słowo kluczowe `use` definiuje lokalne przypisania dla symboli z innych modułów.
 
 ```rust
 use std::fmt::Display as Disp;
@@ -1720,7 +1720,7 @@ Funkcje, które mogą zakończyć się niepowodzeniem mają to zapisane w warto�
 
 W przypadku nieoczekiwanych błędów, których nie da się obsłużyć program panikuje (`panic!()`).
 W przypadku paniki zależnie od ustawień kompilatora stos zostaje zwijany (domyślna opcja, destruktory są wywoływane, można złapać)
-lub program zostaje natychmiatowo przerwany (abort).
+lub program zostaje natychmiastowo przerwany (abort).
 
 Rust domyślnie udostępnia typy służące ustrukturyzowanej obsłudze błędów:
 <!-- column_layout: [1, 1] -->
@@ -2292,7 +2292,7 @@ World
 
 Oprócz makr deklaratywnych Rust obsługuje także makra proceduralne,
 które są pełnoprawnymi funkcjami transformującymi strumień tokenów,
-wykonywanymi na etapie komilacji.
+wykonywanymi na etapie kompilacji.
 <!-- end_slide -->
 
 Zasoby edukacyjne

@@ -12,7 +12,7 @@ theme:
 Overview
 ===
 
-Rust is a compiled, multi-paradigm, general-purpose programing language
+Rust is a compiled, multi-paradigm, general-purpose programming language
 focusing on (among others) security, reliability and performance
 
 <!-- column_layout: [3, 2] -->
@@ -28,11 +28,11 @@ focusing on (among others) security, reliability and performance
 - prevention of data races between threads
 - strong type system inspired by functional languages (foundation of error handling)
 - low level programming features (pointers, unsafe, inline assembly)
-- interoperability with C (aand other languages)
+- interoperability with C (and other languages)
 - macros (declarative and procedural)
 - performance comparable with C
 - use of LLVM infrastructure
-- Cargo package manager integratd with [crates.io](https://crates.io) repository (and other tools)
+- Cargo package manager integrated with [crates.io](https://crates.io) repository (and other tools)
 shipped with the compiler
 
 <!-- reset_layout -->
@@ -197,7 +197,7 @@ fn main() {
     let _żółć: (); // underscore prefix suppresses unused variable warning
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
-    𐐘 = 5; // variables can be initialised after declaration
+    𐐘 = 5; // variables can be initialized after declaration
     println!("a = {}\n", a);
     let a = 0.5f64; // shadowing
     println!("𐐘 = {}", 𐐘);
@@ -437,7 +437,7 @@ User-defined types
 ```rust
 enum EnumName {
     Variant1,       // implicit discriminant 0
-    Variant2 = 123, // explicit disscriminant 123
+    Variant2 = 123, // explicit discriminant 123
     Variant3,       // implicit discriminant 124
     // etc.
 }
@@ -738,7 +738,7 @@ Rust uses a system of ownership with a set of rules checked by the compiler that
 } // x goes out of scope here
 println!("x is {}", x); // compiler error: cannot find value `x` in this scope
 ```
-Rust używa wzorca RAII.
+Rust uses RAII pattern
 ```rust
 {
     let s = "hello".to_string(); // s is valid form here (memory allocated)
@@ -792,7 +792,7 @@ fn print_and_return_string(s: String) -> String {
 
 fn main() {
     let s = "hello".to_string();
-    // ownership transfered to function and then back to new s
+    // ownership transferred to function and then back to new s
     let s = print_and_return_string(s);
     print_and_return_string(s);
 }
@@ -804,9 +804,9 @@ Borrowing
 ---
 
 Values can be accessed without taking ownership over them by using references.
-The action of creating a reference is called *borrownig*.
+The action of creating a reference is called *borrowing*.
 
-# Zasady dotyczące referencji
+# The rules of references
 - At any given time there can be *either* any number of immutable references *or*  one mutable reference.
 - References have to be valid.
 
@@ -914,7 +914,7 @@ fn main() {
 Borrowing
 ---
 
-# Wycinki
+# Slices
 
 <!-- column_layout: [2, 1] -->
 
@@ -956,7 +956,7 @@ world
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Metody i funkcje powiązane
+Methods and associated functions
 ---
 
 <!-- column_layout: [1, 1] -->
@@ -1523,12 +1523,12 @@ fn main() {
 
 <!-- end_slide -->
 
-Project organisation
+Project organization
 ---
 
 - package - collection of crates
 - Crate - compilation unit; tree of modules that compile to a library or an executable
-- Module - code organisation unit allowing for control of scope and privacy
+- Module - code organization unit allowing for control of scope and privacy
 - Path - a way of referencing an item in a module tree
 
 # Project creation
@@ -1549,7 +1549,7 @@ $ tree
 
 <!-- end_slide -->
 
-Project organisation
+Project organization
 ---
 
 # Running a project
@@ -1561,8 +1561,8 @@ $ tree
 └── src
     └── main.rs
 ```
-- `cargo build` - budowanie projektu
-- `cargo run` - budowanie i uruchamianie
+- `cargo build` - building the project
+- `cargo run` - building and running
 
 ```
 $ cargo run
@@ -1572,11 +1572,11 @@ Compiling my_project v0.1.0 (/path/to/my_project)
 Hello, world!
 ```
 
-Flaga `--release` włącza pełną optymalizecję.
+`--release` enables release profile
 
 <!-- end_slide -->
 
-Project organisation
+Project organization
 ---
 
 # Dependencies
@@ -1596,7 +1596,7 @@ image = { version = "0.24.7", default-features = false, features = ["png"] }
 
 <!-- end_slide -->
 
-Project organisation
+Project organization
 ---
 
 # Modules
@@ -2305,7 +2305,7 @@ More resources are described at <https://www.rust-lang.org/learn>
 
 <!-- end_slide -->
 
-Practical example
+Practical examples
 ===
 
 <!-- end_slide -->
