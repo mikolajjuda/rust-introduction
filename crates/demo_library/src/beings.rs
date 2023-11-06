@@ -17,6 +17,9 @@ pub trait LivingBeing: Debug + dyn_clone::DynClone {
 dyn_clone::clone_trait_object!(LivingBeing);
 
 pub trait Pet: LivingBeing {
+
+    fn noise(&self) -> &str;
+
     fn is_good_boy(&self) -> bool {
         true
     }

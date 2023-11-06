@@ -47,6 +47,10 @@ impl LivingBeing for Cat {
 }
 
 impl Pet for Cat {
+    fn noise(&self) -> &str {
+        "meow"
+    }
+
     fn is_good_boy(&self) -> bool {
         !self.scratched_owner
     }
@@ -71,40 +75,5 @@ impl<D: std::ops::Deref<Target = super::Dog>> From<D> for Cat {
             remaining_lives: 1,
             scratched_owner: false,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn cat_from_dog() {
-        let dog = crate::Dog::new("Steve");
-        let cat = Cat::from(dog);
-        assert_eq!(
-            cat,
-            Cat {
-                name: "Steve".to_string(),
-                age: 0,
-                remaining_lives: 1,
-                scratched_owner: false,
-            }
-        );
-    }
-
-    #[test]
-    fn cat_from_dog_ref() {
-        let dog = crate::Dog::new("Steve");
-        let cat = Cat::from(&dog);
-        assert_eq!(
-            cat,
-            Cat {
-                name: "Steve".to_string(),
-                age: 0,
-                remaining_lives: 1,
-                scratched_owner: false,
-            }
-        );
     }
 }

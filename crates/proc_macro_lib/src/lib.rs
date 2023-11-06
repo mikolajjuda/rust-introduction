@@ -31,9 +31,6 @@ fn string_inside_literal(literal: TokenTree) -> String {
     }
 }
 
-/*
-* This macro 
-*/
 #[proc_macro]
 pub fn surround(stream: TokenStream) -> TokenStream {
     let mut iter = stream.into_iter();

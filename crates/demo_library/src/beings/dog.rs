@@ -1,7 +1,7 @@
-use super::LivingBeing;
+use super::{LivingBeing, Pet};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Dog{
+pub struct Dog {
     name: String,
     age: u8,
 }
@@ -33,7 +33,26 @@ impl LivingBeing for Dog {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl Pet for Dog {
+    fn noise(&self) -> &str {
+        "woof"
+    }
+}
+
+impl From<super::Cat> for Dog {
+    fn from(cat: super::Cat) -> Self {
+        Self {
+            name: cat.name().to_string(),
+            age: cat.age(),
+        }
+    }
+}
+
+impl<D: std::ops::Deref<Target = super::Cat>> From<D> for Dog {
+    fn from(cat: D) -> Self {
+        Self {
+            name: cat.name().to_string(),
+            age: cat.age(),
+        }
+    }
 }

@@ -24,6 +24,10 @@ impl Human {
     pub fn pets_mut(&mut self) -> &mut Vec<Box<dyn Pet>> {
         &mut self.pets
     }
+
+    pub fn add_pet<P: Pet + 'static>(&mut self, pet: P) {
+        self.pets.push(Box::new(pet));
+    }
 }
 
 impl LivingBeing for Human {
@@ -47,4 +51,13 @@ impl LivingBeing for Human {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn age_to_100(){
+        let mut human = Human::new("Jason");
+        for _ in 0..100 {
+            human.do_birthday();
+        }
+        assert_eq!(human.age(), 100);
+    }
 }
