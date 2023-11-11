@@ -38,7 +38,7 @@ skupiającym się, między innymi, na bezpieczeństwie, niezawodności i wydajno
 <!-- end_slide -->
 
 Maskotka
----
+===
 Maskotką języka Rust jest krab Ferris.
 
 ![](ferris.png)
@@ -46,7 +46,7 @@ Maskotką języka Rust jest krab Ferris.
 <!-- end_slide -->
 
 Popularność
----
+===
 
 <!-- column_layout: [1, 1] -->
 
@@ -108,9 +108,6 @@ Zajmuje się ono instalacją zestawów narzędzi w skład których wchodzą m.in
 
 <!-- end_slide -->
 
-Wprowadzenie
-===
-
 # Hello World
 ```rust
 fn main() {
@@ -130,7 +127,7 @@ W większości przypadków używanie narzędzia Cargo do budowania projektów je
 <!-- end_slide -->
 
 Typy proste
----
+===
 
 <!-- column_layout: [1, 1] -->
 
@@ -180,7 +177,7 @@ Typy `f32` oraz `f64` zgodne ze standardem IEEE 754-2008.
 <!-- end_slide -->
 
 Zmienne
----
+===
 
 ```rust
 // static items have a precise memory location
@@ -211,7 +208,7 @@ fn main() {
 <!-- end_slide -->
 
 Typy sekwencyjne
----
+===
 
 # Krotki `(T1, T2, T3, /*etc.*/)`
 - lista wartości o różnych typach
@@ -235,7 +232,7 @@ Typy sekwencyjne
 <!-- end_slide -->
 
 Przepływ sterowania
----
+===
 
 # Bloki
 ```rust
@@ -258,9 +255,6 @@ println!("y is {}", y); // y is 6
 
 <!-- end_slide -->
 
-Przepływ sterowania
----
-
 # `if`
 
 ```rust
@@ -282,9 +276,6 @@ y is 2
 
 <!-- end_slide -->
 
-Przepływ sterowania
----
-
 # `loop`
 ```rust
 let mut a = 1;
@@ -302,9 +293,6 @@ first power of 2 greater than 10 is 16
 
 <!-- end_slide -->
 
-Przepływ sterowania
----
-
 # `while`
 ```rust
 let mut a = 1;
@@ -320,9 +308,6 @@ a is 3
 ```
 
 <!-- end_slide -->
-
-Przepływ sterowania
----
 
 # `for`
 ```rust
@@ -346,9 +331,6 @@ horse
 ```
 
 <!-- end_slide -->
-
-Przepływ sterowania
----
 
 # Etykiety
 
@@ -375,9 +357,6 @@ println!("a is {}", a);
 
 <!-- end_slide -->
 
-Przepływ sterowania
----
-
 # `continue`
 ```rust
 for i in 0..=5 {
@@ -394,7 +373,7 @@ for i in 0..=5 {
 <!-- end_slide -->
 
 Typy definiowane przez użytkownika
----
+===
 
 # Struktury
 
@@ -429,9 +408,6 @@ podobne do `()`
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Typy definiowane przez użytkownika
----
-
 # Typy wyliczeniowe
 ```rust
 enum EnumName {
@@ -456,9 +432,6 @@ podobne do tzw. rekordu z wariantami
 
 <!-- end_slide -->
 
-Typy definiowane przez użytkownika
----
-
 # Unie
 
 ```rust
@@ -477,7 +450,7 @@ union StructName {
 <!-- end_slide -->
 
 Dopasowanie do wzorca
----
+===
 
 ```rust
 let number = 7;
@@ -502,9 +475,6 @@ b is 1
 ```
 
 <!-- end_slide -->
-
-Dopasowanie do wzorca
----
 
 ```rust
 struct RGB {
@@ -531,9 +501,6 @@ red: 64, green: 0, blue: 0
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
----
-
 ```rust
 let some_tuple: (u8, bool, f32, char) = (10, false, 0.1, 'Σ');
 match some_tuple {
@@ -553,9 +520,6 @@ a: 10, c: false, d: 0.1, e: Σ
 
 <!-- end_slide -->
 
-Dopasowanie do wzorca
----
-
 ```rust
 let arr = [1, 2, 3, 4, 5];
 match arr {
@@ -572,9 +536,6 @@ a: 1, b: 2, c: 3, d: 4, e: 5
 ```
 
 <!-- end_slide -->
-
-Dopasowanie do wzorca
----
 
 <!-- column_layout: [1, 2] -->
 
@@ -624,9 +585,6 @@ match c {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Dopasowanie do wzorca
----
-
 # `if let`
 
 ```rust
@@ -653,7 +611,7 @@ Możemy się domyślić jak działa.
 <!-- end_slide -->
 
 Funkcje
----
+===
 
 ```rust
 fn function_name(param1: T1, param2: T2, /*etc.*/) -> ReturnType {
@@ -675,7 +633,7 @@ fn is_nonnegative(x: i32) -> bool {
 <!-- end_slide -->
 
 Typy wskaźnikowe
----
+===
 
 # Referencje
 Referencje to wskaźniki do pamięci będącej własnością innej wartości.
@@ -698,7 +656,7 @@ Referencje i wskaźniki na typy o dynamicznym rozmiarze stają się wskaźnikami
 <!-- end_slide -->
 
 Niektóre typy z biblioteki standardowej
----
+===
 
 # `Vec`
 kontener sąsiadującej pamięci o zmiennym rozmiarze na dane tego samego typu
@@ -721,7 +679,7 @@ println!("{}", string);
 <!-- end_slide -->
 
 Własność
----
+===
 
 Zamiast zmuszać programistę do ręcznego alokowania i zwalniania pamięci lub polegać na odśmiecaniu przez garbage collector,
 Rust do zarządzania pamięcią wykorzystuje system własności z zestawem reguł sprawdzanych przez kompilator.
@@ -747,7 +705,7 @@ Rust używa wzorca RAII.
 <!-- end_slide -->
 
 Semantyka przenoszenia
----
+===
 
 ```rust
 let s1 = "hello".to_string();
@@ -769,9 +727,6 @@ fn main() {
 ```
 
 <!-- end_slide -->
-
-Semantyka przenoszenia
----
 
 ```rust
 fn make_string() -> String {
@@ -800,7 +755,7 @@ fn main() {
 <!-- end_slide -->
 
 Pożyczanie
----
+===
 
 Operacje na wartościach można wykonywać bez przejmowania nad nimi własności używając referencji.
 Tworzenie referencji nazywa się *pożyczaniem*.
@@ -811,9 +766,6 @@ Tworzenie referencji nazywa się *pożyczaniem*.
 - Referencje zawsze muszą być prawidłowe
 
 <!-- end_slide -->
-
-Pożyczanie
----
 
 ```rust
 fn print_string(s: &String) {
@@ -841,9 +793,6 @@ fn main() {
 ```
 
 <!-- end_slide -->
-
-Pożyczanie
----
 
 ```rust
 let s = "hello".to_string();
@@ -873,30 +822,6 @@ println!("{}", r2);
 
 <!-- end_slide -->
 
-Pożyczanie
----
-
-```rust
-fn change_string(s: &mut String) {
-    s.push('!');
-}
-
-fn main() {
-    let mut s1 = "hello".to_string();
-    let r1 = &mut s1;
-    // compiler error: cannot borrow `s1` as mutable more than once at a time
-    let r2 = &mut s1;
-    change_string(r1);
-    change_string(r2);
-    println!("{}", s1);
-}
-```
-
-<!-- end_slide -->
-
-Pożyczanie
----
-
 ```rust
 // this will not compile
 fn make_string_reference() -> &String {
@@ -910,9 +835,6 @@ fn main() {
 ```
 
 <!-- end_slide -->
-
-Pożyczanie
----
 
 # Wycinki
 
@@ -957,7 +879,7 @@ world
 <!-- end_slide -->
 
 Metody i funkcje powiązane
----
+===
 
 <!-- column_layout: [1, 1] -->
 
@@ -1001,9 +923,6 @@ age difference is -121
 
 <!-- reset_layout -->
 <!-- end_slide -->
-
-Metody i funkcje powiązane
----
 
 <!-- column_layout: [1, 1] -->
 
@@ -1059,7 +978,7 @@ John dies
 <!-- end_slide -->
 
 Traits
----
+===
 
 <!-- column_layout: [1, 1] -->
 
@@ -1120,9 +1039,6 @@ Is the cat alive? true
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Traits
----
-
 # Niektóre cechy wbudowane
 - Debug - umożliwia formatowanie w kontekście debugowania
 - Display - umożliwia "ładne" formatowanie
@@ -1142,8 +1058,8 @@ Traits
 
 <!-- end_slide -->
 
-Traits
----
+Wyprowadzanie cech
+===
 
 ```rust
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -1173,8 +1089,8 @@ is human equal to cloned_human? true
 
 <!-- end_slide -->
 
-Traits
----
+Supertraits
+===
 
 ```rust
 struct Human {
@@ -1202,7 +1118,7 @@ fn main(){
 <!-- end_slide -->
 
 Uogólnienia
----
+===
 
 ```rust
 struct Point<T> { x: T, y: T, }
@@ -1229,9 +1145,6 @@ p3.special_x(): idk why Strings but here you go: hello
 ```
 
 <!-- end_slide -->
-
-Uogólnienia
----
 
 <!-- column_layout: [2, 1] -->
 
@@ -1276,9 +1189,6 @@ square(2.5): 6.25
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Uogólnienia
----
-
 ```rust
 trait Square<T> {
     fn square(self) -> T;
@@ -1298,11 +1208,35 @@ fn main() {
     println!("{}", 16.5f32.square());
 }
 ```
+<!-- end_slide -->
+
+Mądre wskaźniki
+===
+
+Struktury danych, które zachowują się jak typy wskaźnikowe, ale mają dodatkowe możliwości.
+
+# Niektóre wbudowane mądre wskaźniki
+
+## `Box<T>`
+Wskaźnik, który jest właścicielem wartości na stercie.
+Podobny do `unique_ptr` w C++.
+
+## `Rc<T>`
+Wskaźnik liczący referencje.
+Podobny do `shared_ptr` w C++.
+
+## `Ref<T>` i `RefMut<T>`
+Wskaźniki pozyskiwane z `RefCell<T>`.
+Pilnują zasad pożyczania podczas działania programu zamiast na etapie kompilacji.
 
 <!-- end_slide -->
 
 Polimorfizm dynamiczny
----
+===
+
+<!-- column_layout: [2, 1] -->
+
+<!-- column: 0 -->
 
 ```rust
 struct Human { name: String, }
@@ -1329,10 +1263,18 @@ fn main() {
 }
 ```
 
+<!-- column: 1 -->
+
+```
+Hello, my name is John
+Woof!
+```
+
+<!-- reset_layout -->
 <!-- end_slide -->
 
 Czasy życia
----
+===
 
 Czasy życia to konstrukt kompilatora używany do sprawdzania poprawności pożyczeń.
 
@@ -1384,9 +1326,6 @@ fn main() {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Czasy życia
----
-
 # Czasy życia w wywołaniach funkcji
 
 ```rust
@@ -1407,9 +1346,6 @@ fn main() {
 }
 ```
 <!-- end_slide -->
-
-Czasy życia
----
 
 ```rust
 fn longest_str<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -1435,9 +1371,6 @@ W tym przypadku oznacza to, że wartość wskazywana przez zwracaną referencję
 żyje tak długo jak krócej żyjąca spośród wartości wskazywanych przez referencje w parametrach.
 
 <!-- end_slide -->
-
-Czasy życia
----
 
 # Czasy życia w strukturach danych
 
@@ -1465,9 +1398,6 @@ fn main() {
 
 <!-- end_slide -->
 
-Czasy życia
----
-
 # `'static`
 
 ```rust
@@ -1491,42 +1421,41 @@ fn main() {
 <!-- end_slide -->
 
 Mutowalność wnętrza
----
+===
 
 ```rust
 use std::cell::{Cell, RefCell};
-use std::rc::Rc;
 struct Human {
     name: RefCell<String>,
 }
 struct Pet {
     age: Cell<u8>,
-    owner: Rc<Human>,
 }
 fn main() {
-    let human = Rc::new(Human { name: RefCell::new("John".to_string()) });
-    let pet = Pet {
-        age: Cell::new(10),
-        owner: human.clone(), // cloning a reference
+    let human = Human {
+        name: RefCell::new("John".to_string()),
     };
-    std::mem::drop(human); // dropping a reference
-    println!("pet owner name: {}", pet.owner.name.borrow());
-    // we can mutably borrow interior of a RefCell behind an immutable reference
-    pet.owner.name.borrow_mut().push_str("athan");
-    println!("pet owner name: {}", pet.owner.name.borrow());
+    let human_ref = &human;
+    let pet = Pet { age: Cell::new(10) };
+    let pet_ref = &pet;
 
     // we can't borrow a value behind a Cell
-    let tmp_pet_age = pet.age.get(); // we can get a value
+    let tmp_pet_age = pet_ref.age.get(); // we can get a value
     println!("pet age: {}", tmp_pet_age);
-    pet.age.set(tmp_pet_age + 1); // we can set a new value
-    println!("pet age: {}", pet.age.get());
+    pet_ref.age.set(tmp_pet_age + 1); // we can set a new value
+    println!("pet age: {}", pet_ref.age.get());
+
+    println!("human name: {}", human_ref.name.borrow());
+    // we can mutably borrow interior of a RefCell behind an immutable reference
+    human_ref.name.borrow_mut().push_str("athan");
+    println!("human name: {}", human_ref.name.borrow());
 }
 ```
 
 <!-- end_slide -->
 
 Organizacja projektu
----
+===
 
 - Pakiet - zbiór skrzynek
 - Crate - jednostka kompilacji; drzewo modułów, które kompiluje się do pliku wykonywalnego lub biblioteki
@@ -1550,9 +1479,6 @@ $ tree
 ```
 
 <!-- end_slide -->
-
-Organizacja projektu
----
 
 # Uruchamianie projektu
 
@@ -1578,9 +1504,6 @@ Flaga `--release` włącza pełną optymalizację.
 
 <!-- end_slide -->
 
-Organizacja projektu
----
-
 # Zależności
 
 Zależności są opisywane w sekcjach `[dependencies]` pliku `Cargo.toml`.
@@ -1597,9 +1520,6 @@ image = { version = "0.24.7", default-features = false, features = ["png"] }
 ```
 
 <!-- end_slide -->
-
-Organizacja projektu
----
 
 # Moduły
 
@@ -1628,9 +1548,6 @@ fn main() {
 ```
 
 <!-- end_slide -->
-
-Organizacja projektu
----
 
 # Widoczność i prywatność
 
@@ -1663,9 +1580,6 @@ fn main() {
 ```
 <!-- end_slide -->
 
-Organizacja projektu
----
-
 # Ścieżki
 
 - względne
@@ -1687,7 +1601,7 @@ use random::Source;
 <!-- end_slide -->
 
 Kompilacja warunkowa
----
+===
 
 ```rust
 #[cfg(not(feature = "demo_feature"))]
@@ -1713,7 +1627,7 @@ fn main() {
 <!-- end_slide -->
 
 Obsługa błędów
----
+===
 
 W języku Rust błędy są obsługiwane w jawnym przepływie sterowania.
 Funkcje, które mogą zakończyć się niepowodzeniem mają to zapisane w wartości zwracanej.
@@ -1749,9 +1663,6 @@ pub enum Result<T, E> {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Obsługa błędów
----
-
 ```rust
 use std::collections::HashMap;
 
@@ -1779,9 +1690,6 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 <!-- end_slide -->
 
-Obsługa błędów
----
-
 ```rust
 fn main() {
     let mut input = String::new();
@@ -1800,9 +1708,6 @@ fn main() {
 
 <!-- end_slide -->
 
-Obsługa błędów
----
-
 ```rust
 fn print_str_as_i32(s: &str) -> Result<(), Box<dyn std::error::Error>> {
     let x: i32 = s.parse()?;
@@ -1817,7 +1722,7 @@ fn main(){
 <!-- end_slide -->
 
 Konwersja między typami
----
+===
 
 # Rzutowanie
 
@@ -1841,9 +1746,6 @@ println!("NAN f32 as u8 {}", f32::NAN as u8);
 NAN f32 as u8 0
 ```
 <!-- end_slide -->
-
-Konwersja między typami
----
 
 # `From` i `Into`
 
@@ -1875,9 +1777,6 @@ dog2: Dog { name: "John", age: 30 }
 ```
 <!-- end_slide -->
 
-Konwersja między typami
----
-
 # `TryFrom` i `TryInto`
 
 ```rust
@@ -1897,7 +1796,7 @@ u16 value is 2
 <!-- end_slide -->
 
 Przepełnienie przy operacjach arytmetycznych
----
+===
 
 ```rust
 println!("225u8 + 1 = {}", 255u8 + 1); // compile error in debug mode; 0 in release mode
@@ -1919,7 +1818,7 @@ println!("Wrapping({}) - Wrapping(1) = {}", wrapping_0, wrapping_0 - wrapping_1)
 <!-- end_slide -->
 
 Closures
----
+===
 
 <!-- column_layout: [4, 2] -->
 
@@ -1972,7 +1871,7 @@ after closure
 <!-- end_slide -->
 
 Iteratory
----
+===
 
 ```rust
 let v = vec![1, 2, 3];
@@ -2023,9 +1922,6 @@ while let Some(x) = iter.next() {
 <!-- reset_layout -->
 <!-- end_slide -->
 
-Iteratory
----
-
 ```rust
 let v = vec![1, 2, 3, 4, 5];
 
@@ -2052,7 +1948,7 @@ product: 86400
 <!-- end_slide -->
 
 Obsługa plików
----
+===
 
 ```rust
 let s = std::fs::read_to_string("in.txt").unwrap();
@@ -2080,7 +1976,7 @@ Patrz przykład `files_copy_contents.rs`
 <!-- end_slide -->
 
 Wątki
----
+===
 
 <!-- column_layout: [2, 1] -->
 
@@ -2129,9 +2025,6 @@ main thread: joined
 
 <!-- reset_layout -->
 <!-- end_slide -->
-
-Wątki
----
 
 <!-- column_layout: [3, 1] -->
 
@@ -2186,7 +2079,7 @@ Got: 11
 <!-- end_slide -->
 
 unsafe
----
+===
 
 ```rust
 use std::arch::asm;
@@ -2216,14 +2109,14 @@ x = 4
 <!-- end_slide -->
 
 async
----
+===
 
 Patrz przykład `horrible_async.rs`
 
 <!-- end_slide -->
 
 Dokumentacja i testy
----
+===
 
 ```rust
 /**
@@ -2253,7 +2146,7 @@ fn test_add_numbers() {
 <!-- end_slide -->
 
 Makra
----
+===
 
 <!-- column_layout: [1, 1] -->
 
