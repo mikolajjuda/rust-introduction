@@ -16,7 +16,7 @@ where
 }
 
 fn main() {
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     let (s1, s2) = duplicate(&s);
     println!("s1: {}, s2: {}", s1, s2);
     generic_print(&123);

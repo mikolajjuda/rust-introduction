@@ -23,7 +23,7 @@ impl Speaker for Dog {
 fn main() {
     let v: Vec<Box<dyn Speaker>> = vec![
         Box::new(Human {
-            name: "John".to_string(),
+            name: "John".to_owned(),
         }),
         Box::new(Dog),
     ];

@@ -9,7 +9,7 @@ pub struct Dog {
 impl Dog {
     pub fn new(name: &str) -> Self {
         Self {
-            name: name.to_string(),
+            name: name.to_owned(),
             age: 0,
         }
     }
@@ -29,7 +29,7 @@ impl LivingBeing for Dog {
     }
 
     fn rename(&mut self, new_name: &str) {
-        self.name = new_name.to_string();
+        self.name = new_name.to_owned();
     }
 }
 
@@ -42,7 +42,7 @@ impl Pet for Dog {
 impl From<super::Cat> for Dog {
     fn from(cat: super::Cat) -> Self {
         Self {
-            name: cat.name().to_string(),
+            name: cat.name().to_owned(),
             age: cat.age(),
         }
     }
@@ -51,7 +51,7 @@ impl From<super::Cat> for Dog {
 impl<D: std::ops::Deref<Target = super::Cat>> From<D> for Dog {
     fn from(cat: D) -> Self {
         Self {
-            name: cat.name().to_string(),
+            name: cat.name().to_owned(),
             age: cat.age(),
         }
     }

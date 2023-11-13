@@ -454,7 +454,7 @@ Dopasowanie do wzorca
 
 ```rust
 let number = 7;
-    match number {
+match number {
     1 => println!("lonely"),
     2 | 3 | 5 | 7 | 11 => println!("small prime"),
     13..=19 => println!("teen"),
@@ -670,7 +670,7 @@ println!("{:?}", vec);
 # `String`
 napis w kodowaniu UTF-8 o zmiennym rozmiarze
 ```rust
-let mut string: String = "Hello".to_string();
+let mut string = String::from("hello");
 string.push_str(" world");
 string.push('!');
 println!("{}", string);
@@ -698,7 +698,7 @@ println!("x is {}", x); // compiler error: cannot find value `x` in this scope
 Rust używa wzorca RAII.
 ```rust
 {
-    let s = "hello".to_string(); // s is valid form here (memory allocated)
+    let s: String = "hello".to_owned(); // s is valid form here (memory allocated)
 } // drop method called (destructor) releasing heap memory
 ```
 
@@ -708,7 +708,7 @@ Semantyka przenoszenia
 ===
 
 ```rust
-let s1 = "hello".to_string();
+let s1 = "hello".to_owned();
 let s2 = s1; // assignment operator transfers ownership (unless type implements Copy trait)
 // s1 is no longer valid, destructor will not be called
 println!("{s2}");
@@ -720,7 +720,7 @@ fn print_string(s: String) {
 }
 
 fn main() {
-    let s1 = "hello".to_string();
+    let s1 = "hello".to_owned();
     print_string(s1); // function parameter takes ownership
     print_string(s1); // compiler error: use of moved value: `s1`
 }
@@ -730,7 +730,7 @@ fn main() {
 
 ```rust
 fn make_string() -> String {
-    "hello".to_string()
+    "hello".to_owned()
 }
 
 fn main() {
@@ -745,7 +745,7 @@ fn print_and_return_string(s: String) -> String {
 }
 
 fn main() {
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     // ownership transferred to function and then back to new s
     let s = print_and_return_string(s);
     print_and_return_string(s);
@@ -773,7 +773,7 @@ fn print_string(s: &String) {
 } // s goes out of scope, but it doesn't have ownership of the string, so it's not dropped
 
 fn main() {
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     print_string(&s); // we pass a reference instead of the string itself
     print_string(&s); // s is valid here
 }
@@ -785,7 +785,7 @@ fn change_string(s: &mut String) {
 }
 
 fn main() {
-    let mut s1 = "hello".to_string();
+    let mut s1 = "hello".to_owned();
     println!("{}", s1); // hello
     change_string(&mut s1);
     println!("{}", s1); // hello!
@@ -795,7 +795,7 @@ fn main() {
 <!-- end_slide -->
 
 ```rust
-let s = "hello".to_string();
+let s = "hello".to_owned();
 let r1 = &s;
 let r2 = &s;
 println!("{r1}");
@@ -803,7 +803,7 @@ println!("{r2}");
 ```
 
 ```rust
-let mut s = "hello".to_string();
+let mut s = "hello".to_owned();
 let r1 = &s;
 let r2 = &mut s; /* compiler error:
 cannot borrow `s` as mutable because it is also borrowed as immutable */
@@ -813,7 +813,7 @@ println!("{r2}");
 ```
 
 ```rust
-let mut s1 = "hello".to_string();
+let mut s1 = "hello".to_owned();
 let r1 = &mut s1;
 let r2 = &mut s1; // compiler error: cannot borrow `s1` as mutable more than once at a time
 println!("{}", r1);
@@ -825,7 +825,7 @@ println!("{}", r2);
 ```rust
 // this will not compile
 fn make_string_reference() -> &String {
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     &s // you can't return a reference to a value scoped to the function
 } // s is dropped here so the reference would be invalid
 
@@ -856,7 +856,7 @@ fn square_slice(s: &mut [i32]) {
     }
 }
 fn main() {
-    let s = "Hello, world!".to_string();
+    let s = "Hello, world!".to_owned();
     println!("{}", first_four_letters(&s));
     print_str(&s[7..=11]);
 
@@ -1021,7 +1021,7 @@ fn main() {
     let dog = Dog;
     let cat = Cat;
     let person = Human {
-        name: "John".to_string(),
+        name: "John".to_owned(),
     };
     dog.speak();
     cat.speak();
@@ -1045,6 +1045,7 @@ Is the cat alive? true
 - Clone - umożliwia klonowanie (metoda `clone`)
 - Copy - typ jest kopiowany zamiast przenoszenia
 - Drop - destruktor (metoda `drop`)
+- ToOwned - tworzy wartość posiadaną z wartości pożyczonej
 - Deref i DerefMut - przeładowania operatora `*`
 - Default - domyślne wartości (funkcja `default`)
 - Eq - porównanie będące relacją równoważności
@@ -1071,7 +1072,7 @@ fn main() {
     let default_human = Human::default();
     println!("default human: {:?}", default_human);
     let human = Human {
-        name: "John".to_string(),
+        name: "John".to_owned(),
         age: 40,
     };
     let cloned_human = human.clone();
@@ -1110,7 +1111,7 @@ trait Speaker: std::fmt::Display {
 impl Speaker for Human {}
 
 fn main(){
-    let human = Human { name: "John".to_string() };
+    let human = Human { name: "John".to_owned() };
     human.speak();
 }
 ```
@@ -1134,7 +1135,7 @@ impl Point<String> {
 fn main() {
     let p1: Point<i16> = Point { x: 5, y: 10 };
     let p2 = Point { x: 5.8, y: 10.2 };
-    let p3 = Point { x: "hello".to_string(), y: "world".to_string() };
+    let p3 = Point { x: "hello".to_owned(), y: "world".to_owned() };
     println!("p1.x(): {}, p2.y(): {}, p3.x(): {}", p1.x(), p2.y(), p3.x());
     println!("p3.special_x(): {}", p3.special_x());
 }
@@ -1166,7 +1167,7 @@ where
     x * x
 }
 fn main() {
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     let (s1, s2) = duplicate(&s);
     println!("s1: {}, s2: {}", s1, s2);
     generic_print(&123);
@@ -1254,7 +1255,7 @@ impl Speaker for Dog {
 }
 fn main() {
     let v: Vec<Box<dyn Speaker>> = vec![
-        Box::new(Human { name: "John".to_string() }),
+        Box::new(Human { name: "John".to_owned() }),
         Box::new(Dog),
     ];
     for s in v.iter() {
@@ -1357,8 +1358,8 @@ fn longest_str<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 
 fn main() {
-    let s1 = "xyz".to_string();
-    let s2 = "abcd".to_string();
+    let s1 = "xyz".to_owned();
+    let s2 = "abcd".to_owned();
     let result = longest_str(s1.as_str(), s2.as_str());
     println!("The longest string is {}", result);
 }
@@ -1386,10 +1387,10 @@ struct Pet<'a> {
 
 fn main() {
     let human = Human {
-        name: "John".to_string(),
+        name: "John".to_owned(),
     };
     let pet = Pet {
-        name: "Steve".to_string(),
+        name: "Steve".to_owned(),
         owner: &human,
     };
     println!("{}'s owner name is {}", pet.name, pet.owner.name);
@@ -1433,7 +1434,7 @@ struct Pet {
 }
 fn main() {
     let human = Human {
-        name: RefCell::new("John".to_string()),
+        name: RefCell::new("John".to_owned()),
     };
     let human_ref = &human;
     let pet = Pet { age: Cell::new(10) };
@@ -1668,8 +1669,8 @@ use std::collections::HashMap;
 
 fn main() {
     let mut map = HashMap::<i32, String>::new();
-    map.insert(123, "a".to_string());
-    map.insert(321, "b".to_string());
+    map.insert(123, "a".to_owned());
+    map.insert(321, "b".to_owned());
     match map.get(&666) {
         Some(n) => println!("{}", n),
         None => println!("No such key")
@@ -1843,7 +1844,7 @@ fn main() {
     println!("b before calling closure: {}", b);
     run_mut_closure(&mut |x| { b += x; });
     println!("b after calling closure: {}", b);
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     let owns_string = move || { // s is moved into the closure
         println!("string: {}", s);
         s

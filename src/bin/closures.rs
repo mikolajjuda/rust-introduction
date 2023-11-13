@@ -25,7 +25,7 @@ fn main() {
     });
     println!("b after calling closure: {}", b);
 
-    let s = "hello".to_string();
+    let s = "hello".to_owned();
     let owns_string = move || {
         // s is moved into the closure
         println!("string: {}", s);

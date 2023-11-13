@@ -34,7 +34,7 @@ fn main() {
     let dog = Dog;
     let cat = Cat;
     let person = Human {
-        name: "John".to_string(),
+        name: "John".to_owned(),
     };
     dog.speak();
     cat.speak();

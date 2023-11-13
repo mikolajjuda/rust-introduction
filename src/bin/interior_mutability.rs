@@ -10,7 +10,7 @@ struct Pet {
 
 fn main() {
     let human = Human {
-        name: RefCell::new("John".to_string()),
+        name: RefCell::new("John".to_owned()),
     };
     let human_ref = &human;
     let pet = Pet { age: Cell::new(10) };

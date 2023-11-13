@@ -11,7 +11,7 @@ pub struct Human {
 impl Human {
     pub fn new(name: &str) -> Self {
         Self {
-            name: name.to_string(),
+            name: name.to_owned(),
             age: 0,
             pets: Vec::new(),
         }
@@ -44,7 +44,7 @@ impl LivingBeing for Human {
     }
 
     fn rename(&mut self, new_name: &str) {
-        self.name = new_name.to_string();
+        self.name = new_name.to_owned();
     }
 }
 

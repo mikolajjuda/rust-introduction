@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 fn main() {
     let mut map = HashMap::<i32, String>::new();
-    map.insert(123, "a".to_string());
-    map.insert(321, "b".to_string());
+    map.insert(123, String::from("a"));
+    map.insert(321, String::from("b"));
     
     match map.get(&666) {
         Some(n) => println!("{}", n),

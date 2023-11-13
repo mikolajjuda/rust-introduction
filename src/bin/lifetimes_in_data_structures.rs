@@ -9,10 +9,10 @@ struct Pet<'a> {
 
 fn main() {
     let human = Human {
-        name: "John".to_string(),
+        name: "John".to_owned(),
     };
     let pet = Pet {
-        name: "Steve".to_string(),
+        name: "Steve".to_owned(),
         owner: &human,
     };
     println!("{}'s owner name is {}", pet.name, pet.owner.name);
