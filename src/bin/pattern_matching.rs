@@ -10,7 +10,7 @@ enum Color {
     Green,
     Blue,
     RGB(RGB),
-    HSV{h: u8, s: u8, v: u8},
+    HSV { h: u8, s: u8, v: u8 },
     CMYK(u8, u8, u8, u8),
 }
 
@@ -35,11 +35,19 @@ fn main() {
     let c = RGB { r: 64, g: 0, b: 0 };
     match c {
         RGB { r: 0, g: 0, b: 0 } => println!("black"),
-        RGB { r: r @ 0..=80, g: 0, b: 0, } => println!("some sort of dark red {r}"),
+        RGB {
+            r: r @ 0..=80,
+            g: 0,
+            b: 0,
+        } => println!("some sort of dark red {r}"),
         RGB { b: 255, .. } => println!("something with maximum blue"),
         RGB { r, g, b } => println!("r: {}, g: {}, b: {}", r, g, b),
     }
-    let RGB { r: red, g: green, b: blue, } = c;
+    let RGB {
+        r: red,
+        g: green,
+        b: blue,
+    } = c;
     println!("red: {}, green: {}, blue: {}", red, green, blue);
 
     println!();

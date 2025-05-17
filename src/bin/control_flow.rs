@@ -84,4 +84,21 @@ fn main() {
         }
         println!("{}", i);
     }
+
+    println!();
+
+    let x = Some(5);
+    if let Some(y) = x {
+        println!("y is {}", y);
+    } else {
+        println!("x is not Some");
+    }
+
+    println!();
+
+    let x = Some(5);
+    let Some(y) = x else {
+        panic!("x is None");
+    };
+    println!("y is {}", y);
 }

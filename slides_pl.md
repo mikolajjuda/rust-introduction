@@ -1,6 +1,6 @@
 ---
 title: Rust
-sub_title: Szybki przegląd i wprowadzenie
+sub_title: przegląd i wprowadzenie
 author: Mikołaj Juda
 theme:
   override:
@@ -76,9 +76,10 @@ i wiele innych
 
 # Stack Overflow Development Survey
 
-Przez ostatnie 8 lat (2016-2023) Rust
+Przez ostatnie 9 lat (2016-2024) Rust
 zajmował pierwsze miejsce jako najbardziej uwielbiany język programowania.
 
+- 2024: 82.2%
 - 2023: 84.66%
 - 2022: 86.73%
 - 2021: 86.98%
@@ -191,15 +192,17 @@ fn main() {
     let mut a = 1; // variables are immutable by default
     let b = 2;
     let _żółć: (); // underscore prefix suppresses unused variable warning
+    let 𓂺  = 100;
     a += y + 1; // type of a inferred here u8
     takes_i64(b); // type of b inferred here i64
-    𐐘 = 5; // variables can be initialized after declaration
+    𐐘 = 5; // variables can be initialised after declaration
     println!("a = {}\n", a);
     let a = 0.5f64; // shadowing
     println!("𐐘 = {}", 𐐘);
     println!("y = {}", y);
     println!("a = {}", a);
     println!("b = {}", b);
+    println!("𓂺   = {}", 𓂺  );
     println!("PI = {}", PI);
     println!("NUM = {}", NUM);
 }
@@ -227,7 +230,6 @@ Typy sekwencyjne
 # Wycinki `[T]`
 - typ o dynamicznym rozmiarze reprezentujący "widok" na listę elementów typu `T`
 - zwykle używany poprzez typy wskaźnikowe
-- sprawdzanie poprawności dostępu do elementów tablicy na etapie kompilacji i podczas działania programu
 
 <!-- end_slide -->
 
@@ -328,6 +330,24 @@ for animal in arr {
 dog
 cat
 horse
+```
+
+<!-- end_slide -->
+
+```rust
+let arr = [1, 2, 3];
+println!("{}", arr[5]); // compiler error: index out of bounds: the length is 3 but the index is 5
+for i in 0..5 {
+    println!("{}", arr[i]);
+}
+```
+```
+1
+2
+3
+
+thread 'main' panicked at src/bin/array_bounds.rs:4:24:
+index out of bounds: the len is 3 but the index is 3
 ```
 
 <!-- end_slide -->
@@ -604,6 +624,15 @@ fn main() {
 }
 ```
 
+# `let else`
+```rust
+let x = Some(5);
+let Some(y) = x else {
+    panic!("x is None");
+};
+println!("y is {}", y);
+```
+
 # `while let`
 
 Możemy się domyślić jak działa.
@@ -698,7 +727,7 @@ println!("x is {}", x); // compiler error: cannot find value `x` in this scope
 Rust używa wzorca RAII.
 ```rust
 {
-    let s: String = "hello".to_owned(); // s is valid form here (memory allocated)
+    let s: String = "hello".to_owned(); // s is valid from here (memory allocated)
 } // drop method called (destructor) releasing heap memory
 ```
 
@@ -1586,7 +1615,7 @@ fn main() {
 - względne
     - `foo` lub `self::foo` odnosi się do `foo` w obecnym module
     - `super::foo` odnosi się do `foo` w rodzicu
-- bezwzgledne
+- bezwzględne
     - `crate::foo` odnosi się do `foo` w korzeniu obecnej skrzynki
     - `bar::foo` odnosi się do `foo` w skrzynce `bar`
 
@@ -1800,7 +1829,7 @@ Przepełnienie przy operacjach arytmetycznych
 ===
 
 ```rust
-println!("225u8 + 1 = {}", 255u8 + 1); // compile error in debug mode; 0 in release mode
+println!("225u8 + 1 = {}", 255u8 + 1); // compiler error
 let x255: u8 = "255".parse().unwrap();
 let x0: u8 = "0".parse().unwrap();
 println!("{} + 1 = {}", x255, x255 + 1); // panic in debug mode; 0 in release mode
@@ -2082,6 +2111,19 @@ Got: 11
 unsafe
 ===
 
+<!-- column_layout: [1, 2] -->
+
+<!-- column: 0 -->
+
+W blokach unsafe możemy:
+- wyłuskać surowe wskaźniki
+- wywołać niebezpieczne funkcje
+- uzyskać dostęp do mutowalnych zmiennych statycznych
+- implementować niebezpieczne cechy
+- uzyskać dostęp do pól unii
+
+<!-- column: 1 -->
+
 ```rust
 use std::arch::asm;
 
@@ -2107,6 +2149,15 @@ fn main() {
 1000000^2 = 1000000000000
 x = 4
 ```
+
+<!-- reset_layout -->
+<!-- end_slide -->
+
+FFI
+===
+
+Patrz przykład `unreadable_c`
+
 <!-- end_slide -->
 
 async

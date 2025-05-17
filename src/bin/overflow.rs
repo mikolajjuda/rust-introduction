@@ -1,5 +1,4 @@
 fn main() {
-    println!("225u8 + 1 = {}", 255u8 + 1); // compile error in debug mode; 0 in release mode
     let x255: u8 = "255".parse().unwrap();
     let x0: u8 = "0".parse().unwrap();
     println!("{} + 1 = {}", x255, x255 + 1); // panic in debug mode; 0 in release mode
