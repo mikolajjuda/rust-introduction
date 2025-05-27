@@ -2247,6 +2247,7 @@ Zasoby edukacyjne
 - "Rust by Example" (<https://doc.rust-lang.org/stable/rust-by-example/>)
 - "Comprehensive Rust" (<https://google.github.io/comprehensive-rust/>)
 - "The Rust Reference" (<https://doc.rust-lang.org/stable/reference/>)
+- "The Rustonomicon" (<https://doc.rust-lang.org/nomicon/>)
 
 Inne zasoby są także opisane na <https://www.rust-lang.org/learn>
 

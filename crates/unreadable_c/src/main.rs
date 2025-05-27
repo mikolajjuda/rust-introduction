@@ -31,6 +31,7 @@ extern "C" fn middle(a: c_int, b: c_int, xppp: *mut *mut *mut c_int) -> Interior
     interior
 }
 
+#[unsafe(no_mangle)]
 extern "C" fn unreadable(xpp: *mut *mut c_int, alloc: AllocatorFn) -> *mut MiddleFunctionFn {
     let x = unsafe { **xpp };
     let vp = alloc(1);
